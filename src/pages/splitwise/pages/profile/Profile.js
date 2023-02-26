@@ -13,10 +13,8 @@ const Profile = () => {
   const [user, setUser] = useState(currentUser);
   const dispatch = useDispatch();
   const handleChange = useCallback((e) => {
-    const newUser = { ...user };
-    newUser[e.target.name] = e.target.value;
-    setUser(newUser);
-  });
+    setUser((prevUser) => ({ ...prevUser, [e.target.name]: e.target.value }));
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(authSlice.actions.onUpdateProfile(user));

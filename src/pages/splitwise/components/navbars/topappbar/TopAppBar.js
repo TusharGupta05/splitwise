@@ -7,9 +7,12 @@ const TopAppBar = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((reduxStore) => reduxStore.auth.currentUser);
 
-  const handleChange = useCallback((newUserValue) => {
-    dispatch(authSlice.actions.onChange(newUserValue));
-  }, []);
+  const handleChange = useCallback(
+    (newUserValue) => {
+      dispatch(authSlice.actions.onChange(newUserValue));
+    },
+    [dispatch]
+  );
 
   return (
     <div className={styles['top-app-bar']}>

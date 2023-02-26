@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import authSlice from '../../../../../redux/slices/auth/auth';
 import {
   sideNavBarItems,
@@ -12,7 +12,7 @@ const SideNavBar = () => {
   const dispatch = useDispatch();
   const handleLogout = useCallback(() => {
     dispatch(authSlice.actions.onLogout());
-  }, []);
+  }, [dispatch]);
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>

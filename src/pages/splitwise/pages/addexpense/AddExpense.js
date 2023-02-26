@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import styles from './addexpense.module.css';
 import { EXPENSE_DETAILS } from '../../../../constants/expenseDetails.constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,19 +18,22 @@ const AddExpense = () => {
       [EXPENSE_DETAILS.SPLIT_BETWEEN]: [],
       [EXPENSE_DETAILS.PAID_BY]: currentUser,
     }),
-    [currentUser]
+    []
   );
 
   const initialExpenseDetails = expenseDetails(currentUser);
 
-  const handleSubmit = useCallback((expenseDetails) => {
-    dispatch(transactionsSlice.actions.onAddExpense(expenseDetails));
-  }, []);
+  const handleSubmit = useCallback(
+    (expenseDetails) => {
+      dispatch(transactionsSlice.actions.onAddExpense(expenseDetails));
+    },
+    [dispatch]
+  );
   const handleChange = useCallback(
     (name) => (newValue) => {
       form.setFieldValue(name, newValue);
     },
-    []
+    [form]
   );
 
   return (
