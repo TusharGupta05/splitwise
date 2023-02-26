@@ -1,0 +1,18 @@
+.top-app-bar {
+  height: 10vh;
+  width: 100vw;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container {
+  display: flex;
+}
+
+.spacer {
+  width: 20px;
+}
