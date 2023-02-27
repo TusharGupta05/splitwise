@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import authSlice from '../../../../redux/slices/auth';
-
+import AUTH_REDUCERS from '../../../../redux/constants/authReducers.actionTypes';
 const Login = () => {
   const dispatch = useDispatch();
   const [loginCreds, setLoginCreds] = useState({});
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(authSlice.actions.onLogin(loginCreds));
+    dispatch({ type: AUTH_REDUCERS.LOGIN, payload: loginCreds });
   };
   const handleChange = (e) => {
     setLoginCreds({ ...loginCreds, [e.target.name]: e.target.value });

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import USER_PROFILE from '../../../../constants/userProfile.constants';
-import authSlice from '../../../../redux/slices/auth/auth';
-
+import AUTH_REDUCERS from '../../../../redux/constants/authReducers.actionTypes';
 const Register = () => {
   const dispatch = useDispatch();
   const [user, setUser] = useState({});
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(authSlice.actions.onRegister(user));
+    dispatch({ type: AUTH_REDUCERS.REGISTER, payload: user });
   };
 
   const handleChange = (e) => {

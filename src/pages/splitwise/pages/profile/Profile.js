@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import USER_PROFILE from '../../../../constants/userProfile.constants';
-import authSlice from '../../../../redux/slices/auth/auth';
+import AUTH_REDUCERS from '../../../../redux/constants/authReducers.actionTypes';
 
 const Profile = () => {
   const currentUser = useSelector((reduxStore) =>
@@ -17,7 +17,7 @@ const Profile = () => {
   }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(authSlice.actions.onUpdateProfile(user));
+    dispatch({ type: AUTH_REDUCERS.UPDATE_PROFILE, payload: user });
   };
   return (
     <div>

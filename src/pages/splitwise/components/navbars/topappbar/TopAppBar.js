@@ -1,15 +1,15 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import authSlice from '../../../../../redux/slices/auth/auth';
 import SelectUser from '../../selectusers';
 import styles from './topappbar.module.css';
+import AUTH_REDUCERS from '../../../../../redux/constants/authReducers.actionTypes';
 const TopAppBar = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((reduxStore) => reduxStore.auth.currentUser);
 
   const handleChange = useCallback(
     (newUserValue) => {
-      dispatch(authSlice.actions.onChange(newUserValue));
+      dispatch({ type: AUTH_REDUCERS.CHANGE, payload: newUserValue });
     },
     [dispatch]
   );
