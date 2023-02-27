@@ -29,7 +29,9 @@ const authSlice = createSlice({
       if (registeredUser) {
         state.currentUser = username;
         setItemInLocalStorage(LS_CACHE_KEYS.CURRENT_USER, state.currentUser);
+        return;
       }
+      throw 'invalid username or password';
     },
 
     onRegister(state, action) {
@@ -40,12 +42,12 @@ const authSlice = createSlice({
         return registeredUser.username === user.username;
       });
       if (isRegistered) {
-        return false;
+        throw 'User with same username already exists!';
       }
       registeredUsers.push(user);
       setItemInLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS, registeredUsers);
-      state[LS_CACHE_KEYS.REGISTERED_USERS] = registeredUsers;
-      return true;
+      state.registeredUsers = registeredUsers;
+      return;
     },
 
     onUpdateProfile(state, action) {

@@ -7,8 +7,9 @@ const NumberInput = ({ form, name, handleChange, addonBefore, min }) => {
       parser={(newValue) => {
         const regExp = /^\d+(\.\d{0,13})?$/;
         const val = regExp.test(newValue) ? newValue : '';
-
-        return parseFloat(val).toFixed(2);
+        const floatVal = parseFloat(parseFloat(val).toFixed(2));
+        const numVal = parseInt(parseFloat(val));
+        return floatVal == numVal ? numVal : floatVal;
       }}
       form={form}
       name={name}

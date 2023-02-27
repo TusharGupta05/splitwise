@@ -8,7 +8,6 @@ import {
 import filterTransactions from '../../../../helpers/filterTransactions';
 
 const Transactions = () => {
-  // const { EXPENSE_DETAILS, DESCRIPTORS } = EXP;
   const [currentUser, transactions] = useSelector((reduxStore) => [
     reduxStore.auth.currentUser,
     reduxStore.transactions,

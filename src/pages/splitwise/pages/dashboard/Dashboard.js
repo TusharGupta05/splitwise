@@ -21,8 +21,14 @@ const Dashboard = () => {
 
   filteredTransactions.forEach((transaction) => {
     const splitBetweenCount = transaction[EXPENSE_DETAILS.SPLIT_BETWEEN].length;
-    const splittedAmount =
+    let splittedAmount =
       transaction[EXPENSE_DETAILS.AMOUNT] / splitBetweenCount;
+    const numSplittedAmount = parseInt(splittedAmount);
+    if (splittedAmount == numSplittedAmount) {
+      splittedAmount = numSplittedAmount;
+    } else {
+      splittedAmount = parseFloat(splittedAmount.toFixed(2));
+    }
     if (transaction[EXPENSE_DETAILS.PAID_BY] === currentUser) {
       transaction[EXPENSE_DETAILS.SPLIT_BETWEEN].forEach((user) => {
         if (user !== currentUser) {
