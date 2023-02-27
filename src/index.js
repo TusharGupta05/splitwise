@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import Splitwise from './pages/splitwise';
-import reduxStore from './redux/store';
+import reduxStore from './redux';
 import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd';
 

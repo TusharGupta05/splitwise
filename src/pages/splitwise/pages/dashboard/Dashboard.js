@@ -2,6 +2,7 @@ import { Card } from 'antd';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { EXPENSE_DETAILS } from '../../../../constants/expenseDetails.constants';
+import filterTransactions from '../../../../helpers/filterTransactions';
 import NoExpense from './components/NoExpense';
 import styles from './dashboard.module.css';
 const Dashboard = () => {
@@ -10,11 +11,7 @@ const Dashboard = () => {
     reduxStore.transactions,
   ]);
   const filteredTransactions = transactions.filter(
-    (transaction) =>
-      transaction[EXPENSE_DETAILS.PAID_BY] === currentUser ||
-      transaction[EXPENSE_DETAILS.SPLIT_BETWEEN].find(
-        (user) => user === currentUser
-      )
+    filterTransactions(currentUser)
   );
 
   const records = {};

@@ -1,10 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit';
-// import auth from './slices/auth';
-import authSlice from './slices/auth';
-import transactionsSlice from './slices/transactions';
+import { combineReducers, createStore } from 'redux';
+import authReducers from './auth/authReducers';
+import transactionsReducers from './transactions/transactionsReducers';
 
-const reduxStore = configureStore({
-  reducer: { auth: authSlice.reducer, transactions: transactionsSlice.reducer },
-});
+const reduxStore = createStore(
+  combineReducers({ transactions: transactionsReducers, auth: authReducers })
+);
 
 export default reduxStore;
