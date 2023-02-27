@@ -2,11 +2,10 @@ import { Form, Card, Input, Button } from 'antd';
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import USER_PROFILE from '../../../../constants/userProfile.constants';
-import authSlice from '../../../../redux/slices/auth/auth';
 import { UserOutlined, MailOutlined } from '@ant-design/icons';
-import AUTH_ERRORS from '../../../../constants/authErrors.constants';
 import styles from './profile.module.css';
 import VALIDATION_RULES from '../../../../constants/validationRules';
+import AUTH_REDUCERS from '../../../../redux/constants/authReducers.actionTypes';
 
 const Profile = () => {
   const [form] = Form.useForm();
@@ -21,11 +20,12 @@ const Profile = () => {
     return profile;
   });
   const handleSubmit = useCallback(
-    (e) => {
-      dispatch(authSlice.actions.onUpdateProfile(e));
+    (user) => {
+      dispatch({ type: AUTH_REDUCERS.UPDATE_PROFILE, payload: user });
     },
     [dispatch]
   );
+
   return (
     <div className={styles['container']}>
       <Form

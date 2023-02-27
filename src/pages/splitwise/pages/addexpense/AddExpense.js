@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SelectUsers from '../../components/selectusers';
 import NumberInput from '../../components/numberinput';
 import { Button, Form, Input } from 'antd';
-import transactionsSlice from '../../../../redux/slices/transactions/transactions';
+import TRANSACTIONS_REDUCER from '../../../../redux/constants/transactionsReducers.actionTypes';
 
 const AddExpense = () => {
   const [form] = Form.useForm();
@@ -25,7 +25,10 @@ const AddExpense = () => {
 
   const handleSubmit = useCallback(
     (expenseDetails) => {
-      dispatch(transactionsSlice.actions.onAddExpense(expenseDetails));
+      dispatch({
+        type: TRANSACTIONS_REDUCER.ADD_EXPENSE,
+        payload: expenseDetails,
+      });
     },
     [dispatch]
   );

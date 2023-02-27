@@ -1,17 +1,17 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, Outlet } from 'react-router-dom';
-import authSlice from '../../../../../redux/slices/auth/auth';
 import {
   sideNavBarItems,
   sideNavBarLinks,
 } from '../../../constants/sidenavbar';
 import styles from './sidenavbar.module.css';
+import AUTH_REDUCERS from '../../../../../redux/constants/authReducers.actionTypes';
 
 const SideNavBar = () => {
   const dispatch = useDispatch();
   const handleLogout = useCallback(() => {
-    dispatch(authSlice.actions.onLogout());
+    dispatch({ type: AUTH_REDUCERS.LOGOUT });
   }, [dispatch]);
   return (
     <div className={styles.wrapper}>

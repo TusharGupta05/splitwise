@@ -3,20 +3,20 @@ import { Form, Input, Button, Card } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import authSlice from '../../../../redux/slices/auth';
 import styles from './login.module.css';
 import USER_PROFILE from '../../../../constants/userProfile.constants';
 import { NavLink } from 'react-router-dom';
 import AUTH_ERRORS from '../../../../constants/authErrors.constants';
 import ROUTES from '../../constants/routes';
 import VALIDATION_RULES from '../../../../constants/validationRules';
+import AUTH_REDUCERS from '../../../../redux/constants/authReducers.actionTypes';
 const Login = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const handleSubmit = useCallback(
-    (e) => {
+    (loginCreds) => {
       try {
-        dispatch(authSlice.actions.onLogin(e));
+        dispatch({ type: AUTH_REDUCERS.LOGIN, payload: loginCreds });
       } catch (err) {
         form.setFields([
           {
@@ -28,6 +28,7 @@ const Login = () => {
     },
     [dispatch]
   );
+
   return (
     <div className={styles['container']}>
       <Card className={styles['login-form']}>
