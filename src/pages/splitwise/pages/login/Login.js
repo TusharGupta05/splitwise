@@ -3,13 +3,14 @@ import { Form, Input, Button, Card } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import styles from './login.module.css';
 import USER_PROFILE from '../../../../constants/userProfile.constants';
-import { NavLink } from 'react-router-dom';
 import AUTH_ERRORS from '../../../../constants/authErrors.constants';
 import ROUTES from '../../constants/routes';
 import VALIDATION_RULES from '../../../../constants/validationRules';
 import AUTH_REDUCER from '../../../../redux/constants/authReducer.actionTypes';
+
 const Login = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -26,41 +27,22 @@ const Login = () => {
         ]);
       }
     },
-    [dispatch]
+    [dispatch, form],
   );
 
   return (
     <div className={styles.container}>
       <Card className={styles.loginForm}>
-        <Form
-          form={form}
-          name='normal_login'
-          initialValues={{ remember: true }}
-          onFinish={handleSubmit}
-        >
-          <Form.Item
-            name={USER_PROFILE.USERNAME}
-            rules={VALIDATION_RULES.USERNAME}
-          >
-            <Input prefix={<UserOutlined />} placeholder='Username' />
+        <Form form={form} name="normal_login" initialValues={{ remember: true }} onFinish={handleSubmit}>
+          <Form.Item name={USER_PROFILE.USERNAME} rules={VALIDATION_RULES.USERNAME}>
+            <Input prefix={<UserOutlined />} placeholder="Username" />
           </Form.Item>
-          <Form.Item
-            name={USER_PROFILE.PASSWORD}
-            rules={[{ required: true, message: AUTH_ERRORS.PASSWORD }]}
-          >
-            <Input
-              prefix={<LockOutlined />}
-              type='password'
-              placeholder='Password'
-            />
+          <Form.Item name={USER_PROFILE.PASSWORD} rules={[{ required: true, message: AUTH_ERRORS.PASSWORD }]}>
+            <Input prefix={<LockOutlined />} type="password" placeholder="Password" />
           </Form.Item>
 
           <Form.Item>
-            <Button
-              type='primary'
-              htmlType='submit'
-              className={styles.loginFormButton}
-            >
+            <Button type="primary" htmlType="submit" className={styles.loginFormButton}>
               Log in
             </Button>
           </Form.Item>

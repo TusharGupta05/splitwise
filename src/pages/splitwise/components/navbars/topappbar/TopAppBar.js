@@ -4,11 +4,10 @@ import SelectUser from '../../selectusers';
 import styles from './topappbar.module.css';
 import AUTH_REDUCER from '../../../../../redux/constants/authReducer.actionTypes';
 import { REDUCER_NAMES } from '../../../../../constants/reducers.constants';
+
 const TopAppBar = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector(
-    (reduxStore) => reduxStore[REDUCER_NAMES.AUTH].currentUser
-  );
+  const currentUser = useSelector((reduxStore) => reduxStore[REDUCER_NAMES.AUTH].currentUser);
 
   const handleChange = useCallback(
     (newUserValue) => {
@@ -17,18 +16,18 @@ const TopAppBar = () => {
         payload: newUserValue,
       });
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (
     <div className={styles.topAppBar}>
       <div className={styles.container}>
-        <div className={styles.spacer}></div>
+        <div className={styles.spacer} />
         <div>Splitwise</div>
       </div>
       <div className={styles.container}>
         <SelectUser initialState={currentUser} handleChange={handleChange} />
-        <div className={styles.spacer}></div>
+        <div className={styles.spacer} />
       </div>
     </div>
   );

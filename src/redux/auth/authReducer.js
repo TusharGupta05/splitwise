@@ -1,11 +1,8 @@
-import LS_CACHE_KEYS from '../../constants/localStorage.cacheKeys';
-import AUTH_REDUCER from '../constants/authReducer.actionTypes';
-import {
-  setItemInLocalStorage,
-  getItemFromLocalStorage,
-} from '../../helpers/localStorage';
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
+import LS_CACHE_KEYS from '../../constants/localStorage.cacheKeys';
+import AUTH_REDUCER from '../constants/authReducer.actionTypes';
+import { setItemInLocalStorage, getItemFromLocalStorage } from '../../helpers/localStorage';
 
 const authInitialState = {
   currentUser: getItemFromLocalStorage(LS_CACHE_KEYS.CURRENT_USER),
@@ -13,59 +10,54 @@ const authInitialState = {
 };
 
 const handleUserChange = produce((state, action) => {
-  state.currentUser = action.payload;
-  setItemInLocalStorage(LS_CACHE_KEYS.CURRENT_USER, state.currentUser);
+  const newState = state;
+  newState.currentUser = action.payload;
+  setItemInLocalStorage(LS_CACHE_KEYS.CURRENT_USER, newState.currentUser);
 });
 const handleLogin = produce((state, action) => {
+  const newState = state;
   const { username, password } = action.payload;
-  const registeredUsers =
-    getItemFromLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS) || [];
 
-  const registeredUser = registeredUsers.find(
-    (user) => user.username === username && user.password === password
-  );
+  const { registeredUsers } = state;
+  const registeredUser = registeredUsers.find((user) => user.username === username && user.password === password);
   if (registeredUser) {
-    state.currentUser = username;
-    setItemInLocalStorage(LS_CACHE_KEYS.CURRENT_USER, state.currentUser);
+    newState.currentUser = username;
+    setItemInLocalStorage(LS_CACHE_KEYS.CURRENT_USER, newState.currentUser);
     return;
   }
-  throw 'invalid username or password';
+  throw new Error('invalid username or password');
 });
 
 const handleRegister = produce((state, action) => {
+  const newState = state;
   const user = action.payload;
-  const registeredUsers =
-    getItemFromLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS) || [];
-  const isRegistered = registeredUsers.find((registeredUser) => {
-    return registeredUser.username === user.username;
-  });
+  const { registeredUsers } = state;
+  const isRegistered = registeredUsers.find((registeredUser) => registeredUser.username === user.username);
   if (isRegistered) {
-    throw 'User with same username already exists!';
+    throw new Error('User with same username already exists!');
   }
   registeredUsers.push(user);
   setItemInLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS, registeredUsers);
-  state.registeredUsers = registeredUsers;
+  newState.registeredUsers = registeredUsers;
 });
 
 const handleUpdateProfile = produce((state, action) => {
+  const newState = state;
   const updatedUser = action.payload;
-  const registeredUserIndex = state.registeredUsers.findIndex(
-    (registeredUser) => registeredUser.username === updatedUser.username
-  );
+  const registeredUserIndex = newState.registeredUsers.findIndex((registeredUser) => registeredUser.username === updatedUser.username);
   if (registeredUserIndex !== -1) {
-    state.registeredUsers[registeredUserIndex] = {
-      password: state.registeredUsers[registeredUserIndex].password,
+    newState.registeredUsers[registeredUserIndex] = {
+      password: newState.registeredUsers[registeredUserIndex].password,
       ...updatedUser,
     };
-    setItemInLocalStorage(
-      LS_CACHE_KEYS.REGISTERED_USERS,
-      state.registeredUsers
-    );
+
+    setItemInLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS, newState.registeredUsers);
   }
 });
 
 const handleLogout = produce((state) => {
-  state.currentUser = null;
+  const newState = state;
+  newState.currentUser = null;
   setItemInLocalStorage(LS_CACHE_KEYS.CURRENT_USER, null);
 });
 
@@ -77,7 +69,7 @@ const authReducer = handleActions(
     [AUTH_REDUCER.HANDLE_UPDATE_PROFILE]: handleUpdateProfile,
     [AUTH_REDUCER.HANDLE_LOGOUT]: handleLogout,
   },
-  authInitialState
+  authInitialState,
 );
 
 export default authReducer;

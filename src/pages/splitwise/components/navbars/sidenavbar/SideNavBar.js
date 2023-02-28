@@ -1,10 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, Outlet } from 'react-router-dom';
-import {
-  sideNavBarItems,
-  sideNavBarLinks,
-} from '../../../constants/sidenavbar';
+import { sideNavBarItems, sideNavBarLinks } from '../../../constants/sidenavbar';
 import styles from './sidenavbar.module.css';
 import AUTH_REDUCER from '../../../../../redux/constants/authReducer.actionTypes';
 
@@ -18,29 +15,19 @@ const SideNavBar = () => {
       <div className={styles.container}>
         <div className={styles.sideNavBar}>
           <div>
-            {sideNavBarItems.map((sideNavBarItem, index) => {
-              return (
-                <li key={sideNavBarItem}>
-                  <NavLink
-                    className={({ isActive }) => {
-                      return `${styles.link} ${
-                        isActive ? styles.linkActive : ''
-                      }`;
-                    }}
-                    to={sideNavBarLinks[index]}
-                  >
-                    {sideNavBarItem}
-                  </NavLink>
-                </li>
-              );
-            })}
+            {sideNavBarItems.map((sideNavBarItem, index) => (
+              <li key={sideNavBarItem}>
+                <NavLink className={({ isActive }) => `${styles.link} ${isActive ? styles.linkActive : ''}`} to={sideNavBarLinks[index]}>
+                  {sideNavBarItem}
+                </NavLink>
+              </li>
+            ))}
           </div>
           <div>
-            <li
-              className={`${styles.logout} ${styles.link}`}
-              onClick={handleLogout}
-            >
-              <NavLink className={styles.link}>Log out</NavLink>
+            <li className={`${styles.logout} ${styles.link}`}>
+              <NavLink className={styles.link} onClick={handleLogout}>
+                Log out
+              </NavLink>
             </li>
           </div>
         </div>

@@ -1,13 +1,11 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import ROUTES from '../../constants/routes';
 import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 
 const CheckAuth = ({ isAuthRequired }) => {
-  const currentUser = useSelector((reduxStore) => {
-    return reduxStore[REDUCER_NAMES.AUTH].currentUser;
-  });
-
+  const currentUser = useSelector((reduxStore) => reduxStore[REDUCER_NAMES.AUTH].currentUser);
   if (isAuthRequired) {
     if (currentUser) {
       return <Outlet />;

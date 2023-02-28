@@ -7,22 +7,19 @@ import filterTransactions from '../../../../helpers/filterTransactions';
 import floatToFixed from '../../../../helpers/floatToFixed';
 import NoExpense from './components/NoExpense';
 import styles from './dashboard.module.css';
+
 const Dashboard = () => {
   const [currentUser, transactions] = useSelector((reduxStore) => [
     reduxStore[REDUCER_NAMES.AUTH].currentUser,
     reduxStore[REDUCER_NAMES.TRANSACTIONS],
   ]);
-  const filteredTransactions = transactions.filter(
-    filterTransactions(currentUser)
-  );
+  const filteredTransactions = transactions.filter(filterTransactions(currentUser));
 
   const records = {};
 
   filteredTransactions.forEach((transaction) => {
     const splitBetweenCount = transaction[EXPENSE_DETAILS.SPLIT_BETWEEN].length;
-    const splittedAmount = floatToFixed(
-      transaction[EXPENSE_DETAILS.AMOUNT] / splitBetweenCount
-    );
+    const splittedAmount = floatToFixed(transaction[EXPENSE_DETAILS.AMOUNT] / splitBetweenCount);
 
     if (transaction[EXPENSE_DETAILS.PAID_BY] === currentUser) {
       transaction[EXPENSE_DETAILS.SPLIT_BETWEEN].forEach((user) => {
@@ -43,20 +40,9 @@ const Dashboard = () => {
       }
     }
   });
-  console.log(records);
-  const youOwe = floatToFixed(
-    Object.values(records).reduce(
-      (total, currentValue) => (total += Math.max(0, currentValue)),
-      0
-    )
-  );
+  const youOwe = floatToFixed(Object.values(records).reduce((total, currentValue) => total + Math.max(0, currentValue), 0));
   // console.log(youOwe);
-  const youAreOwed = floatToFixed(
-    Object.values(records).reduce(
-      (total, currentValue) => (total += Math.abs(Math.min(0, currentValue))),
-      0
-    )
-  );
+  const youAreOwed = floatToFixed(Object.values(records).reduce((total, currentValue) => total + Math.abs(Math.min(0, currentValue)), 0));
   return (
     <div className={styles.container}>
       <div className={styles.statusContainer}>
@@ -75,7 +61,7 @@ const Dashboard = () => {
               {amount > 0 ? `You owe ${user} ₹` : `${user} owes you ₹`}
               {Math.abs(floatToFixed(amount))}
             </Card>
-          )
+          ),
         )}
         {youOwe === 0 && youAreOwed === 0 && <NoExpense />}
       </div>

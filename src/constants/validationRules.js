@@ -11,7 +11,7 @@ const VALIDATION_RULES = {
   NAME: [
     { required: true, message: AUTH_ERRORS.EMPTY_NAME },
     {
-      pattern: new RegExp(/^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/),
+      pattern: /^[A-Za-z\s]{1,}[.]{0,1}[A-Za-z\s]{0,}$/,
       message: AUTH_ERRORS.INVALID_NAME,
     },
   ],

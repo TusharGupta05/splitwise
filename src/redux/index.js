@@ -10,5 +10,5 @@ const defaultReducers = {
 
 const rootReducer = combineReducers(defaultReducers);
 
-const reduxStore = createStore(rootReducer);
+const reduxStore = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__());
 export default reduxStore;

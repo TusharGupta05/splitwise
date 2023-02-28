@@ -10,34 +10,23 @@ import NavBars from './components/navbars';
 import ROUTES from './constants/routes';
 import AddExpense from './pages/addexpense';
 
-const Splitwise = () => {
-  return (
-    <Routes>
-      <Route element={<CheckAuth isAuthRequired={false} />}>
-        <Route path={ROUTES.LOGIN_ROUTE} element={<Login />}></Route>
-        <Route path={ROUTES.REGISTER_ROUTE} element={<Register />}></Route>
+const Splitwise = () => (
+  <Routes>
+    <Route element={<CheckAuth isAuthRequired={false} />}>
+      <Route path={ROUTES.LOGIN_ROUTE} element={<Login />} />
+      <Route path={ROUTES.REGISTER_ROUTE} element={<Register />} />
+    </Route>
+    <Route element={<CheckAuth isAuthRequired />}>
+      <Route element={<NavBars />}>
+        <Route path={ROUTES.LOGOUT_ROUTE} element={<Login />} />
+        <Route path={ROUTES.PROFILE_ROUTE} element={<Profile />} />
+        <Route path={ROUTES.DASHBOARD_ROUTE} element={<Dashboard />} />
+        <Route path={ROUTES.TRANSACTIONS_ROUTE} element={<Transactions />} />
+        <Route path={ROUTES.ADD_EXPENSE_ROUTE} element={<AddExpense />} />
       </Route>
-      <Route element={<CheckAuth isAuthRequired={true} />}>
-        <Route element={<NavBars />}>
-          <Route path={ROUTES.LOGOUT_ROUTE} element={<Login />}></Route>
-          <Route path={ROUTES.PROFILE_ROUTE} element={<Profile />}></Route>
-          <Route path={ROUTES.DASHBOARD_ROUTE} element={<Dashboard />}></Route>
-          <Route
-            path={ROUTES.TRANSACTIONS_ROUTE}
-            element={<Transactions />}
-          ></Route>
-          <Route
-            path={ROUTES.ADD_EXPENSE_ROUTE}
-            element={<AddExpense />}
-          ></Route>
-        </Route>
-      </Route>
-      <Route
-        path='*'
-        element={<Navigate to={ROUTES.DASHBOARD_ROUTE} />}
-      ></Route>
-    </Routes>
-  );
-};
+    </Route>
+    <Route path="*" element={<Navigate to={ROUTES.DASHBOARD_ROUTE} />} />
+  </Routes>
+);
 
 export default Splitwise;
