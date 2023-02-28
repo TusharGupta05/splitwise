@@ -5,10 +5,10 @@
   justify-content: center;
   align-items: center;
 }
-.register-form {
+.registerForm {
   min-width: 300px;
   /* max-width: 80%; */
 }
-.register-form-button {
+.registerFormButton {
   width: 100%;
 }

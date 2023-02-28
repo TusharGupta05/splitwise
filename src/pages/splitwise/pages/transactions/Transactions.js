@@ -7,10 +7,11 @@ import {
 } from '../../../../constants/expenseDetails.constants';
 import filterTransactions from '../../../../helpers/filterTransactions';
 
+import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 const Transactions = () => {
   const [currentUser, transactions] = useSelector((reduxStore) => [
-    reduxStore.auth.currentUser,
-    reduxStore.transactions,
+    reduxStore[REDUCER_NAMES.AUTH].currentUser,
+    reduxStore[REDUCER_NAMES.TRANSACTIONS],
   ]);
   const filteredTransactions = transactions.filter(
     filterTransactions(currentUser)

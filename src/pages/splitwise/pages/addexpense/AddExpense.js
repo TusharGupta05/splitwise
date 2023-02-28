@@ -5,30 +5,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import SelectUsers from '../../components/selectusers';
 import NumberInput from '../../components/numberinput';
 import { Button, Form, Input } from 'antd';
-import TRANSACTIONS_REDUCER from '../../../../redux/constants/transactionsReducers.actionTypes';
+import TRANSACTIONS_REDUCER from '../../../../redux/constants/transactionsReducer.actionTypes';
+import { useNavigate } from 'react-router-dom';
+import ROUTES from '../../constants/routes';
+import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 
 const AddExpense = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const currentUser = useSelector((reduxStore) => reduxStore.auth.currentUser);
-  const expenseDetails = useCallback(
-    (currentUser) => ({
-      [EXPENSE_DETAILS.AMOUNT]: null,
-      [EXPENSE_DETAILS.DESCRIPTION]: '',
-      [EXPENSE_DETAILS.SPLIT_BETWEEN]: [],
-      [EXPENSE_DETAILS.PAID_BY]: currentUser,
-    }),
-    []
+  const navigate = useNavigate();
+  const currentUser = useSelector(
+    (reduxStore) => reduxStore[REDUCER_NAMES.AUTH].currentUser
   );
-
-  const initialExpenseDetails = expenseDetails(currentUser);
+  const initialExpenseDetails = {
+    [EXPENSE_DETAILS.AMOUNT]: null,
+    [EXPENSE_DETAILS.DESCRIPTION]: '',
+    [EXPENSE_DETAILS.SPLIT_BETWEEN]: [],
+    [EXPENSE_DETAILS.PAID_BY]: currentUser,
+  };
 
   const handleSubmit = useCallback(
     (expenseDetails) => {
       dispatch({
-        type: TRANSACTIONS_REDUCER.ADD_EXPENSE,
+        type: TRANSACTIONS_REDUCER.HANDLE_ADD_EXPENSE,
         payload: expenseDetails,
       });
+      navigate(ROUTES.DASHBOARD_ROUTE);
     },
     [dispatch]
   );
@@ -42,7 +44,7 @@ const AddExpense = () => {
   return (
     <div className={styles.container}>
       <h4>Add a new expense</h4>
-      <div className={styles['inner-container']}></div>
+      <div className={styles.innerContainer}></div>
       <Form
         initialValues={initialExpenseDetails}
         form={form}

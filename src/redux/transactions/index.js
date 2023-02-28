@@ -1,1 +1,1 @@
-export { default } from './transactionsReducers';
+export { default } from './transactionsReducer';

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Select } from 'antd';
+import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 
 const SelectUsers = ({
   mode = 'single',
@@ -9,7 +10,7 @@ const SelectUsers = ({
   handleChange,
 }) => {
   const registeredUsers = useSelector((reduxStore) => {
-    return reduxStore.auth.registeredUsers;
+    return reduxStore[REDUCER_NAMES.AUTH].registeredUsers;
   });
   return (
     <Select

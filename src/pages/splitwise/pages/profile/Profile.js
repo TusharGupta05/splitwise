@@ -5,29 +5,30 @@ import USER_PROFILE from '../../../../constants/userProfile.constants';
 import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import styles from './profile.module.css';
 import VALIDATION_RULES from '../../../../constants/validationRules';
-import AUTH_REDUCERS from '../../../../redux/constants/authReducers.actionTypes';
+import AUTH_REDUCER from '../../../../redux/constants/authReducer.actionTypes';
+import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 
 const Profile = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const initialUserDetails = useSelector((reduxStore) => {
-    const currentUser = reduxStore.auth.currentUser;
-    const { password, ...profile } = reduxStore.auth.registeredUsers.find(
-      (registeredUser) => {
-        return registeredUser.username === currentUser;
-      }
-    );
+    const currentUser = reduxStore[REDUCER_NAMES.AUTH].currentUser;
+    const { password, ...profile } = reduxStore[
+      REDUCER_NAMES.AUTH
+    ].registeredUsers.find((registeredUser) => {
+      return registeredUser.username === currentUser;
+    });
     return profile;
   });
   const handleSubmit = useCallback(
     (user) => {
-      dispatch({ type: AUTH_REDUCERS.UPDATE_PROFILE, payload: user });
+      dispatch({ type: AUTH_REDUCER.HANDLE_UPDATE_PROFILE, payload: user });
     },
     [dispatch]
   );
 
   return (
-    <div className={styles['container']}>
+    <div className={styles.container}>
       <Form
         form={form}
         initialValues={initialUserDetails}
@@ -50,7 +51,7 @@ const Profile = () => {
           <Button
             type='primary'
             htmlType='submit'
-            className={styles['profile-form-button']}
+            className={styles.profileFormButton}
           >
             Submit
           </Button>

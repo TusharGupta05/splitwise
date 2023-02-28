@@ -5,10 +5,10 @@
   justify-content: center;
   align-items: center;
 }
-.profile-form {
+.profileForm {
   min-width: 300px;
   /* max-width: 80%; */
 }
-.profile-form-button {
+.profileFormButton {
   width: 100%;
 }

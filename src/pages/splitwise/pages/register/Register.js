@@ -8,7 +8,7 @@ import AUTH_ERRORS from '../../../../constants/authErrors.constants';
 import { NavLink, useNavigate } from 'react-router-dom';
 import ROUTES from '../../constants/routes';
 import VALIDATION_RULES from '../../../../constants/validationRules';
-import AUTH_REDUCERS from '../../../../redux/constants/authReducers.actionTypes';
+import AUTH_REDUCER from '../../../../redux/constants/authReducer.actionTypes';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const Register = () => {
   const navigate = useNavigate();
   const handleSubmit = useCallback((user) => {
     try {
-      dispatch({ type: AUTH_REDUCERS.REGISTER, payload: user });
+      dispatch({ type: AUTH_REDUCER.HANDLE_REGISTER, payload: user });
       navigate(ROUTES.LOGIN_ROUTE);
     } catch (err) {
       form.setFields([
@@ -29,8 +29,8 @@ const Register = () => {
   }, []);
 
   return (
-    <div className={styles['container']}>
-      <Card className={styles['register-form']}>
+    <div className={styles.container}>
+      <Card className={styles.registerForm}>
         <Form
           form={form}
           initialValues={{ remember: true }}
@@ -63,7 +63,7 @@ const Register = () => {
             <Button
               type='primary'
               htmlType='submit'
-              className={styles['register-form-button']}
+              className={styles.registerFormButton}
             >
               Register
             </Button>

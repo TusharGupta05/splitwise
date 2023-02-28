@@ -2,20 +2,26 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SelectUser from '../../selectusers';
 import styles from './topappbar.module.css';
-import AUTH_REDUCERS from '../../../../../redux/constants/authReducers.actionTypes';
+import AUTH_REDUCER from '../../../../../redux/constants/authReducer.actionTypes';
+import { REDUCER_NAMES } from '../../../../../constants/reducers.constants';
 const TopAppBar = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector((reduxStore) => reduxStore.auth.currentUser);
+  const currentUser = useSelector(
+    (reduxStore) => reduxStore[REDUCER_NAMES.AUTH].currentUser
+  );
 
   const handleChange = useCallback(
     (newUserValue) => {
-      dispatch({ type: AUTH_REDUCERS.CHANGE, payload: newUserValue });
+      dispatch({
+        type: AUTH_REDUCER.HANDLE_USER_CHANGE,
+        payload: newUserValue,
+      });
     },
     [dispatch]
   );
 
   return (
-    <div className={styles['top-app-bar']}>
+    <div className={styles.topAppBar}>
       <div className={styles.container}>
         <div className={styles.spacer}></div>
         <div>Splitwise</div>

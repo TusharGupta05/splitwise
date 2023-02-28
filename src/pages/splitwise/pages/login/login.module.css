@@ -5,10 +5,10 @@
   justify-content: center;
   align-items: center;
 }
-.login-form {
+.loginForm {
   min-width: 300px;
   max-width: 80%;
 }
-.login-form-button {
+.loginFormButton {
   width: 100%;
 }

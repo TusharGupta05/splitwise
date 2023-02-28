@@ -9,14 +9,14 @@ import { NavLink } from 'react-router-dom';
 import AUTH_ERRORS from '../../../../constants/authErrors.constants';
 import ROUTES from '../../constants/routes';
 import VALIDATION_RULES from '../../../../constants/validationRules';
-import AUTH_REDUCERS from '../../../../redux/constants/authReducers.actionTypes';
+import AUTH_REDUCER from '../../../../redux/constants/authReducer.actionTypes';
 const Login = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const handleSubmit = useCallback(
     (loginCreds) => {
       try {
-        dispatch({ type: AUTH_REDUCERS.LOGIN, payload: loginCreds });
+        dispatch({ type: AUTH_REDUCER.HANDLE_LOGIN, payload: loginCreds });
       } catch (err) {
         form.setFields([
           {
@@ -30,8 +30,8 @@ const Login = () => {
   );
 
   return (
-    <div className={styles['container']}>
-      <Card className={styles['login-form']}>
+    <div className={styles.container}>
+      <Card className={styles.loginForm}>
         <Form
           form={form}
           name='normal_login'
@@ -59,7 +59,7 @@ const Login = () => {
             <Button
               type='primary'
               htmlType='submit'
-              className={styles['login-form-button']}
+              className={styles.loginFormButton}
             >
               Log in
             </Button>

@@ -1,44 +1,22 @@
 import LS_CACHE_KEYS from '../../constants/localStorage.cacheKeys';
-import AUTH_REDUCERS from '../constants/authReducers.actionTypes';
+import AUTH_REDUCER from '../constants/authReducer.actionTypes';
 import {
   setItemInLocalStorage,
   getItemFromLocalStorage,
 } from '../../helpers/localStorage';
+import { handleActions } from 'redux-actions';
+import produce from 'immer';
 
 const authInitialState = {
   currentUser: getItemFromLocalStorage(LS_CACHE_KEYS.CURRENT_USER),
   registeredUsers: getItemFromLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS),
 };
 
-const authReducers = (state = authInitialState, action) => {
-  const newState = { ...state };
-  switch (action.type) {
-    case AUTH_REDUCERS.CHANGE:
-      onChange(newState, action);
-      break;
-    case AUTH_REDUCERS.LOGIN:
-      onLogin(newState, action);
-      break;
-    case AUTH_REDUCERS.REGISTER:
-      onRegister(newState, action);
-      break;
-    case AUTH_REDUCERS.UPDATE_PROFILE:
-      onUpdateProfile(newState, action);
-      break;
-    case AUTH_REDUCERS.LOGOUT:
-      onLogout(newState, action);
-      break;
-    default:
-      break;
-  }
-  return newState;
-};
-
-const onChange = (state, action) => {
+const handleUserChange = produce((state, action) => {
   state.currentUser = action.payload;
   setItemInLocalStorage(LS_CACHE_KEYS.CURRENT_USER, state.currentUser);
-};
-const onLogin = (state, action) => {
+});
+const handleLogin = produce((state, action) => {
   const { username, password } = action.payload;
   const registeredUsers =
     getItemFromLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS) || [];
@@ -52,9 +30,9 @@ const onLogin = (state, action) => {
     return;
   }
   throw 'invalid username or password';
-};
+});
 
-const onRegister = (state, action) => {
+const handleRegister = produce((state, action) => {
   const user = action.payload;
   const registeredUsers =
     getItemFromLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS) || [];
@@ -67,9 +45,9 @@ const onRegister = (state, action) => {
   registeredUsers.push(user);
   setItemInLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS, registeredUsers);
   state.registeredUsers = registeredUsers;
-};
+});
 
-const onUpdateProfile = (state, action) => {
+const handleUpdateProfile = produce((state, action) => {
   const updatedUser = action.payload;
   const registeredUserIndex = state.registeredUsers.findIndex(
     (registeredUser) => registeredUser.username === updatedUser.username
@@ -84,11 +62,22 @@ const onUpdateProfile = (state, action) => {
       state.registeredUsers
     );
   }
-};
+});
 
-const onLogout = (state) => {
+const handleLogout = produce((state) => {
   state.currentUser = null;
   setItemInLocalStorage(LS_CACHE_KEYS.CURRENT_USER, null);
-};
+});
 
-export default authReducers;
+const authReducer = handleActions(
+  {
+    [AUTH_REDUCER.HANDLE_USER_CHANGE]: handleUserChange,
+    [AUTH_REDUCER.HANDLE_LOGIN]: handleLogin,
+    [AUTH_REDUCER.HANDLE_REGISTER]: handleRegister,
+    [AUTH_REDUCER.HANDLE_UPDATE_PROFILE]: handleUpdateProfile,
+    [AUTH_REDUCER.HANDLE_LOGOUT]: handleLogout,
+  },
+  authInitialState
+);
+
+export default authReducer;

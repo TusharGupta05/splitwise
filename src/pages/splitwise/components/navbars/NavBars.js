@@ -5,7 +5,7 @@ import TopAppBar from './topappbar';
 
 const NavBars = () => {
   return (
-    <div className={styles['nav-bars']}>
+    <div className={styles.navBars}>
       <TopAppBar />
       <SideNavBar />
     </div>
