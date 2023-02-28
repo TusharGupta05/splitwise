@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { EXPENSE_DETAILS } from '../../../../constants/expenseDetails.constants';
 import filterTransactions from '../../../../helpers/filterTransactions';
+import floatToFixed from '../../../../helpers/floatToFixed';
 import NoExpense from './components/NoExpense';
 import styles from './dashboard.module.css';
 const Dashboard = () => {
@@ -18,14 +19,9 @@ const Dashboard = () => {
 
   filteredTransactions.forEach((transaction) => {
     const splitBetweenCount = transaction[EXPENSE_DETAILS.SPLIT_BETWEEN].length;
-    let splittedAmount =
-      transaction[EXPENSE_DETAILS.AMOUNT] / splitBetweenCount;
-    const numSplittedAmount = parseInt(splittedAmount);
-    if (splittedAmount == numSplittedAmount) {
-      splittedAmount = numSplittedAmount;
-    } else {
-      splittedAmount = parseFloat(splittedAmount.toFixed(2));
-    }
+    const splittedAmount = floatToFixed(
+      transaction[EXPENSE_DETAILS.AMOUNT] / splitBetweenCount
+    );
     if (transaction[EXPENSE_DETAILS.PAID_BY] === currentUser) {
       transaction[EXPENSE_DETAILS.SPLIT_BETWEEN].forEach((user) => {
         if (user !== currentUser) {
@@ -45,13 +41,19 @@ const Dashboard = () => {
       }
     }
   });
-  const youOwe = Object.values(records).reduce(
-    (total, currentValue) => (total += Math.max(0, currentValue)),
-    0
+  console.log(records);
+  const youOwe = floatToFixed(
+    Object.values(records).reduce(
+      (total, currentValue) => (total += Math.max(0, currentValue)),
+      0
+    )
   );
-  const youAreOwed = Object.values(records).reduce(
-    (total, currentValue) => (total += Math.abs(Math.min(0, currentValue))),
-    0
+  // console.log(youOwe);
+  const youAreOwed = floatToFixed(
+    Object.values(records).reduce(
+      (total, currentValue) => (total += Math.abs(Math.min(0, currentValue))),
+      0
+    )
   );
   return (
     <div className={styles.container}>

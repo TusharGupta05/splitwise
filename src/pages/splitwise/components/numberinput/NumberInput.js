@@ -1,15 +1,14 @@
 import React from 'react';
 import { InputNumber } from 'antd';
+import floatToFixed from '../../../../helpers/floatToFixed';
 
 const NumberInput = ({ form, name, handleChange, addonBefore, min }) => {
   return (
     <InputNumber
       parser={(newValue) => {
         const regExp = /^\d+(\.\d{0,13})?$/;
-        const val = regExp.test(newValue) ? newValue : '';
-        const floatVal = parseFloat(parseFloat(val).toFixed(2));
-        const numVal = parseInt(parseFloat(val));
-        return floatVal == numVal ? numVal : floatVal;
+        const val = parseFloat(regExp.test(newValue) ? newValue : '');
+        return floatToFixed(val);
       }}
       form={form}
       name={name}
