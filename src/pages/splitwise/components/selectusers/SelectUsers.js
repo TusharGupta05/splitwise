@@ -3,17 +3,17 @@ import { useSelector } from 'react-redux';
 import { Select } from 'antd';
 import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 
-const SelectUsers = ({ mode = 'single', placeholder, initialState, handleChange }) => {
+const SelectUsers = ({ compKey, mode = 'single', placeholder, defaultValue, onChange }) => {
   const registeredUsers = useSelector((reduxStore) => reduxStore[REDUCER_NAMES.AUTH].registeredUsers);
   return (
     <Select
-      key={initialState}
+      key={compKey}
       mode={mode}
-      onChange={handleChange}
+      onChange={onChange}
       placeholder={placeholder}
-      defaultValue={initialState}
-      style={{ width: '120px' }}
-      options={registeredUsers.map(({ username, ...rem }) => ({
+      defaultValue={defaultValue}
+      style={{ width: mode === 'single' ? '120px' : '200px' }}
+      options={registeredUsers.map(({ username }) => ({
         value: username,
         label: username,
       }))}

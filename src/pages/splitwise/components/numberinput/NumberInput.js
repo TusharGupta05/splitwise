@@ -2,8 +2,9 @@ import React from 'react';
 import { InputNumber } from 'antd';
 import floatToFixed from '../../../../helpers/floatToFixed';
 
-const NumberInput = ({ form, name, handleChange, addonBefore, min }) => (
+const NumberInput = ({ form, name, onChange, defaultValue, addonBefore, min }) => (
   <InputNumber
+    defaultValue={defaultValue}
     parser={(newValue) => {
       const regExp = /^\d+(\.\d{0,13})?$/;
       const val = parseFloat(regExp.test(newValue) ? newValue : '');
@@ -11,7 +12,7 @@ const NumberInput = ({ form, name, handleChange, addonBefore, min }) => (
     }}
     form={form}
     name={name}
-    onChange={handleChange}
+    onChange={onChange}
     addonBefore={addonBefore}
     min={min}
     style={{ width: '100%' }}

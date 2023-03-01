@@ -22,7 +22,7 @@ const Login = () => {
         form.setFields([
           {
             name: USER_PROFILE.PASSWORD,
-            errors: [err],
+            errors: [err.message],
           },
         ]);
       }

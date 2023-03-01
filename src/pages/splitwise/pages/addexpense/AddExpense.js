@@ -61,7 +61,7 @@ const AddExpense = () => {
             },
           ]}
         >
-          <NumberInput form={form} name={EXPENSE_DETAILS.AMOUNT} handleChange={handleChange(EXPENSE_DETAILS.AMOUNT)} addonBefore="₹" min={1} />
+          <NumberInput form={form} name={EXPENSE_DETAILS.AMOUNT} onChange={handleChange(EXPENSE_DETAILS.AMOUNT)} addonBefore="₹" min={1} />
         </Form.Item>
         <Form.Item
           name={EXPENSE_DETAILS.SPLIT_BETWEEN}
@@ -74,11 +74,12 @@ const AddExpense = () => {
           ]}
         >
           <SelectUsers
+            compKey={initialExpenseDetails[EXPENSE_DETAILS.SPLIT_BETWEEN]}
             mode="multiple"
             placeholder="Select friends...."
             name={EXPENSE_DETAILS.SPLIT_BETWEEN}
             form={form}
-            handleChange={handleChange(EXPENSE_DETAILS.SPLIT_BETWEEN)}
+            onChange={handleChange(EXPENSE_DETAILS.SPLIT_BETWEEN)}
           />
         </Form.Item>
         <Form.Item
@@ -91,7 +92,13 @@ const AddExpense = () => {
             },
           ]}
         >
-          <SelectUsers handleChange={handleChange(EXPENSE_DETAILS.PAID_BY)} initialState={currentUser} name={EXPENSE_DETAILS.PAID_BY} form={form} />
+          <SelectUsers
+            compKey={initialExpenseDetails[EXPENSE_DETAILS.PAID_BY]}
+            onChange={handleChange(EXPENSE_DETAILS.PAID_BY)}
+            defaultValue={currentUser}
+            name={EXPENSE_DETAILS.PAID_BY}
+            form={form}
+          />
         </Form.Item>
         <Form.Item
           name={EXPENSE_DETAILS.DESCRIPTION}
