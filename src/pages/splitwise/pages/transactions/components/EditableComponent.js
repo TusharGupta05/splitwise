@@ -1,12 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { REDUCER_NAMES } from '../../../../../constants/reducers.constants';
+import _ from 'lodash';
 
-const EditableComponent = ({ parentComponentProps, childComponentProps, component }) => {
-  const { index, transactionKey } = parentComponentProps;
-
+const EditableComponent = ({ path, childComponentProps, component }) => {
   const Component = component;
-  const defaultValue = useSelector((reduxStore) => reduxStore[REDUCER_NAMES.TRANSACTIONS][index][transactionKey]);
+  const defaultValue = useSelector((reduxStore) => _.get(reduxStore, path));
   const childCompProps = { ...childComponentProps };
   childCompProps.defaultValue = defaultValue;
   return <Component {...childCompProps} />;

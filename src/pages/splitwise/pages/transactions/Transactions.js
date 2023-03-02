@@ -11,21 +11,21 @@ import NumberInput from '../../components/numberinput/NumberInput';
 import TextInput from '../../components/textinput/TextInput';
 
 const renderColumn =
-  (transactionKey, handleChange) =>
+  (property, handleChange) =>
   (_, { key: index }) => {
-    const onChange = handleChange(index, transactionKey);
-    const parentComponentProps = { index, transactionKey };
+    const onChange = handleChange(index, property);
+    const path = [REDUCER_NAMES.TRANSACTIONS, index, property];
     const childComponentProps = { onChange };
-    switch (transactionKey) {
+    switch (property) {
       case EXPENSE_DETAILS.PAID_BY:
-        return <EditableComponent {...{ parentComponentProps }} {...{ childComponentProps }} component={SelectUsers} />;
+        return <EditableComponent path={path} {...{ childComponentProps }} component={SelectUsers} />;
       case EXPENSE_DETAILS.AMOUNT:
-        return <EditableComponent {...{ parentComponentProps }} {...{ childComponentProps }} component={NumberInput} />;
+        return <EditableComponent path={path} {...{ childComponentProps }} component={NumberInput} />;
       case EXPENSE_DETAILS.SPLIT_BETWEEN:
         childComponentProps.mode = 'multiple';
-        return <EditableComponent {...{ parentComponentProps }} {...{ childComponentProps }} component={SelectUsers} />;
+        return <EditableComponent path={path} {...{ childComponentProps }} component={SelectUsers} />;
       case EXPENSE_DETAILS.DESCRIPTION:
-        return <EditableComponent {...{ parentComponentProps }} {...{ childComponentProps }} component={TextInput} />;
+        return <EditableComponent path={path} {...{ childComponentProps }} component={TextInput} />;
       default:
         return null;
     }

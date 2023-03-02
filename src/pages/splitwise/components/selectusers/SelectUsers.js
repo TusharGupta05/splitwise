@@ -1,17 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Select } from 'antd';
 import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 
-const SelectUsers = ({ compKey, mode = 'single', placeholder, defaultValue, onChange }) => {
+const SelectUsers = ({ mode = 'single', placeholder, defaultValue, onChange, form }) => {
   const registeredUsers = useSelector((reduxStore) => reduxStore[REDUCER_NAMES.AUTH].registeredUsers);
+  const [value, setValue] = useState(mode === 'single' ? defaultValue : []);
+  useEffect(() => {
+    setValue((prevValue) => {
+      let newValue = defaultValue;
+      if (mode !== 'single') {
+        if (defaultValue) {
+          newValue = defaultValue;
+        } else {
+          newValue = prevValue;
+        }
+      }
+      if (defaultValue !== undefined) onChange(newValue);
+      return newValue;
+    });
+  }, [defaultValue, mode, onChange]);
   return (
     <Select
-      key={compKey}
+      form={form}
       mode={mode}
-      onChange={onChange}
+      onChange={(newValue) => {
+        onChange(newValue);
+        setValue(newValue);
+      }}
       placeholder={placeholder}
-      defaultValue={defaultValue}
+      value={value}
       style={{ width: mode === 'single' ? '120px' : '200px' }}
       options={registeredUsers.map(({ username }) => ({
         value: username,

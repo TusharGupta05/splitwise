@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import styles from './addexpense.module.css';
@@ -8,18 +8,18 @@ import SelectUsers from '../../components/selectusers';
 import NumberInput from '../../components/numberinput';
 import TRANSACTIONS_REDUCER from '../../../../redux/constants/transactionsReducer.actionTypes';
 import ROUTES from '../../constants/routes';
+import EditableComponent from '../transactions/components/EditableComponent';
 import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 
 const AddExpense = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const currentUser = useSelector((reduxStore) => reduxStore[REDUCER_NAMES.AUTH].currentUser);
   const initialExpenseDetails = {
     [EXPENSE_DETAILS.AMOUNT]: null,
     [EXPENSE_DETAILS.DESCRIPTION]: '',
     [EXPENSE_DETAILS.SPLIT_BETWEEN]: [],
-    [EXPENSE_DETAILS.PAID_BY]: currentUser,
+    [EXPENSE_DETAILS.PAID_BY]: '',
   };
   const handleSubmit = useCallback(
     (expenseDetails) => {
@@ -43,7 +43,7 @@ const AddExpense = () => {
       <h4>Add a new expense</h4>
       <div className={styles.innerContainer} />
       <Form
-        initialValues={initialExpenseDetails}
+        defaultValue={initialExpenseDetails}
         form={form}
         labelCol={{ span: 10 }}
         wrapperCol={{ span: 14 }}
@@ -92,12 +92,10 @@ const AddExpense = () => {
             },
           ]}
         >
-          <SelectUsers
-            compKey={initialExpenseDetails[EXPENSE_DETAILS.PAID_BY]}
-            onChange={handleChange(EXPENSE_DETAILS.PAID_BY)}
-            defaultValue={currentUser}
-            name={EXPENSE_DETAILS.PAID_BY}
-            form={form}
+          <EditableComponent
+            path={[REDUCER_NAMES.AUTH, 'currentUser']}
+            childComponentProps={{ onChange: handleChange(EXPENSE_DETAILS.PAID_BY), form, name: EXPENSE_DETAILS.PAID_BY }}
+            component={SelectUsers}
           />
         </Form.Item>
         <Form.Item
