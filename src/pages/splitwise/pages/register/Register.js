@@ -23,7 +23,7 @@ const Register = () => {
         form.setFields([
           {
             name: USER_PROFILE.USERNAME,
-            errors: [err.msg],
+            errors: [err.message],
           },
         ]);
       }
