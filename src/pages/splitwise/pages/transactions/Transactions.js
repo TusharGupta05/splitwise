@@ -9,6 +9,8 @@ import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 import TRANSACTIONS_REDUCER from '../../../../redux/constants/transactionsReducer.actionTypes';
 import NumberInput from '../../components/numberinput/NumberInput';
 import TextInput from '../../components/textinput/TextInput';
+import reduxStore from '../../../../redux';
+import USER_PROFILE from '../../../../constants/userProfile.constants';
 
 const renderColumn =
   (property, handleChange) =>
@@ -33,7 +35,8 @@ const renderColumn =
 
 const Transactions = () => {
   const dispatch = useDispatch();
-  const transactionsNum = useSelector((reduxStore) => reduxStore[REDUCER_NAMES.TRANSACTIONS].length, shallowEqual);
+  const transactionsNum = useSelector((store) => store[REDUCER_NAMES.TRANSACTIONS].length, shallowEqual);
+  const { registeredUsers } = reduxStore.getState()[REDUCER_NAMES.AUTH];
 
   const transactions = Array.from([...Array(transactionsNum).keys()].map((val) => ({ key: val })));
   const handleChange = useCallback(
@@ -43,6 +46,10 @@ const Transactions = () => {
       }, 1000),
     [dispatch],
   );
+  const filters = registeredUsers.map((registeredUser) => ({
+    text: registeredUser[USER_PROFILE.USERNAME],
+    value: registeredUser[USER_PROFILE.USERNAME],
+  }));
 
   return (
     <Table
@@ -53,6 +60,18 @@ const Transactions = () => {
         key: column,
         width: column === EXPENSE_DETAILS.SPLIT_BETWEEN ? '200px' : '50px',
         render: renderColumn(column, handleChange),
+        filters: EXPENSE_DETAILS.PAID_BY === column || EXPENSE_DETAILS.SPLIT_BETWEEN === column ? filters : null,
+        sorter:
+          column === EXPENSE_DETAILS.AMOUNT
+            ? (record1, record2) =>
+                reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record1.key][column] -
+                reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record2.key][column]
+            : null,
+        sortDirections: ['ascend', 'descend'],
+        onFilter: (value, record) => {
+          if (column === EXPENSE_DETAILS.PAID_BY) return reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column] === value;
+          return reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column].findIndex((user) => user === value) !== -1;
+        },
       }))}
       pagination={{ pageSize: 5 }}
     />

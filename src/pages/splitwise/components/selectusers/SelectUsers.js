@@ -16,7 +16,9 @@ const SelectUsers = ({ mode = 'single', placeholder, defaultValue, onChange, for
           newValue = prevValue;
         }
       }
-      if (defaultValue !== undefined) onChange(newValue);
+      if (defaultValue && defaultValue !== newValue) {
+        onChange(newValue);
+      }
       return newValue;
     });
   }, [defaultValue, mode, onChange]);
@@ -25,8 +27,10 @@ const SelectUsers = ({ mode = 'single', placeholder, defaultValue, onChange, for
       form={form}
       mode={mode}
       onChange={(newValue) => {
-        onChange(newValue);
-        setValue(newValue);
+        if (value !== newValue) {
+          onChange(newValue);
+          setValue(newValue);
+        }
       }}
       placeholder={placeholder}
       value={value}
