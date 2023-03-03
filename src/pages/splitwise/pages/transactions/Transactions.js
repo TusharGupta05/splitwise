@@ -2,6 +2,7 @@ import { Table } from 'antd';
 import React, { useCallback } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import _debounce from 'lodash/debounce';
+import { useSearchParams } from 'react-router-dom';
 import SelectUsers from '../../components/selectusers';
 import EditableComponent from './components/EditableComponent';
 import { EXPENSE_DETAILS, DESCRIPTORS } from '../../../../constants/expenseDetails.constants';
@@ -34,6 +35,7 @@ const renderColumn =
   };
 
 const Transactions = () => {
+  const [filterParams, setFilterParams] = useSearchParams({});
   const dispatch = useDispatch();
   const transactionsNum = useSelector((store) => store[REDUCER_NAMES.TRANSACTIONS].length, shallowEqual);
   const { registeredUsers } = reduxStore.getState()[REDUCER_NAMES.AUTH];
@@ -67,12 +69,33 @@ const Transactions = () => {
                 reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record1.key][column] -
                 reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record2.key][column]
             : null,
-        sortDirections: ['ascend', 'descend'],
+        defaultSortOrder: column === EXPENSE_DETAILS.AMOUNT && filterParams.getAll(column) ? filterParams.getAll(column)[0] : undefined,
+        sortDirections: column === EXPENSE_DETAILS.AMOUNT ? ['ascend', 'descend'] : null,
+        defaultFilteredValue:
+          (column === EXPENSE_DETAILS.PAID_BY || column === EXPENSE_DETAILS.SPLIT_BETWEEN) && filterParams.getAll(column).length > 0
+            ? filterParams.getAll(column)
+            : null,
         onFilter: (value, record) => {
-          if (column === EXPENSE_DETAILS.PAID_BY) return reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column] === value;
-          return reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column].findIndex((user) => user === value) !== -1;
+          if (column === EXPENSE_DETAILS.PAID_BY && reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column] === value) {
+            return true;
+          } else if (
+            column === EXPENSE_DETAILS.SPLIT_BETWEEN &&
+            reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column].findIndex((user) => user === value) !== -1
+          ) {
+            return true;
+          }
+          return false;
         },
       }))}
+      onChange={(_, fil, sortOrder) => {
+        const newFilters = Object.keys(fil)
+          .filter((key) => fil[key] !== null)
+          .reduce((prev, key) => ({ ...prev, [key]: fil[key] }), filterParams);
+        if (sortOrder && sortOrder.order) {
+          newFilters[EXPENSE_DETAILS.AMOUNT] = [sortOrder.order];
+        }
+        setFilterParams(newFilters);
+      }}
       pagination={{ pageSize: 5 }}
     />
   );
