@@ -3,12 +3,12 @@
   width: 95%;
 }
 
-.inner-container {
+.innerContainer {
   /* width: 50%; */
   height: 100%;
 }
 
-.status-container {
+.statusContainer {
   display: flex;
   width: 100%;
 }

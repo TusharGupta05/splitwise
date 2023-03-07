@@ -1,0 +1,14 @@
+.container {
+  height: 60vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.profileForm {
+  min-width: 300px;
+  /* max-width: 80%; */
+}
+.profileFormButton {
+  width: 100%;
+}

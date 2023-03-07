@@ -1,67 +1,47 @@
-import React, { useCallback, useState } from 'react';
+import { Form, Input, Button } from 'antd';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import USER_PROFILE from '../../../../constants/userProfile.constants';
-import AUTH_REDUCERS from '../../../../redux/constants/authReducers.actionTypes';
+import styles from './profile.module.css';
+import VALIDATION_RULES from '../../../../constants/validationRules';
+import AUTH_REDUCER from '../../../../redux/constants/authReducer.actionTypes';
+import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 
 const Profile = () => {
-  const currentUser = useSelector((reduxStore) =>
-    reduxStore.auth.registeredUsers.find(
-      (registeredUser) =>
-        registeredUser.username === reduxStore.auth.currentUser
-    )
-  );
-  const [user, setUser] = useState(currentUser);
   const dispatch = useDispatch();
-  const handleChange = useCallback((e) => {
-    setUser((prevUser) => ({ ...prevUser, [e.target.name]: e.target.value }));
-  }, []);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch({ type: AUTH_REDUCERS.UPDATE_PROFILE, payload: user });
-  };
+  const initialUserDetails = useSelector((reduxStore) => {
+    const { currentUser } = reduxStore[REDUCER_NAMES.AUTH];
+    const { password, ...profile } = reduxStore[REDUCER_NAMES.AUTH].registeredUsers.find((registeredUser) => registeredUser.username === currentUser);
+
+    return profile;
+  });
+  const handleSubmit = useCallback(
+    (user) => {
+      dispatch({ type: AUTH_REDUCER.HANDLE_UPDATE_PROFILE, payload: user });
+    },
+    [dispatch],
+  );
+
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor={USER_PROFILE.NAME}>
-            Name:
-            <input
-              id={USER_PROFILE.NAME}
-              name={USER_PROFILE.NAME}
-              value={user.name || ''}
-              type='text'
-              onChange={handleChange}
-            />
-          </label>
-        </div>
-        <div>
-          <label htmlFor={USER_PROFILE.USERNAME}>
-            Username:
-            <input
-              id={USER_PROFILE.USERNAME}
-              name={USER_PROFILE.USERNAME}
-              value={user.username || ''}
-              type='text'
-              readOnly
-            />
-          </label>
-        </div>
-        <div>
-          <label htmlFor={USER_PROFILE.EMAIL}>
-            Email:
-            <input
-              id={USER_PROFILE.EMAIL}
-              name={USER_PROFILE.EMAIL}
-              value={user.email || ''}
-              type={USER_PROFILE.EMAIL}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
-        <div>
-          <input type='submit' />
-        </div>
-      </form>
+    <div className={styles.container}>
+      <Form key={initialUserDetails[USER_PROFILE.USERNAME]} initialValues={initialUserDetails} onFinish={handleSubmit}>
+        <Form.Item name={USER_PROFILE.NAME} rules={VALIDATION_RULES.NAME}>
+          <Input prefix={<UserOutlined />} placeholder="Name" />
+        </Form.Item>
+        <Form.Item name={USER_PROFILE.USERNAME} rules={VALIDATION_RULES.USERNAME}>
+          <Input prefix={<UserOutlined />} placeholder="Username" disabled />
+        </Form.Item>
+        <Form.Item name={USER_PROFILE.EMAIL} rules={VALIDATION_RULES.EMAIL}>
+          <Input prefix={<MailOutlined />} placeholder="Email" />
+        </Form.Item>
+
+        <Form.Item name="submit">
+          <Button type="primary" htmlType="submit" className={styles.profileFormButton}>
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };
