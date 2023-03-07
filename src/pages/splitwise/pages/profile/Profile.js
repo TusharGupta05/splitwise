@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import USER_PROFILE from '../../../../constants/userProfile.constants';
 import styles from './profile.module.css';
-import VALIDATION_RULES from '../../../../constants/validationRules';
+import VALIDATION_RULES from '../../../../constants/authDetailsValidationRules';
 import AUTH_REDUCER from '../../../../redux/constants/authReducer.actionTypes';
 import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 

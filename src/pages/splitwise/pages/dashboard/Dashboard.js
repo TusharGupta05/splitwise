@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { EXPENSE_DETAILS } from '../../../../constants/expenseDetails.constants';
 import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
+import calculateSplittedAmounts from '../../../../helpers/calculateSplittedAmounts';
 import filterTransactions from '../../../../helpers/filterTransactions';
 import floatToFixed from '../../../../helpers/floatToFixed';
 import NoExpense from './components/NoExpense';
@@ -18,30 +19,28 @@ const Dashboard = () => {
   const records = {};
 
   filteredTransactions.forEach((transaction) => {
-    const splitBetweenCount = transaction[EXPENSE_DETAILS.SPLIT_BETWEEN].length;
-    const splittedAmount = floatToFixed(transaction[EXPENSE_DETAILS.AMOUNT] / splitBetweenCount);
+    const splittedAmounts = calculateSplittedAmounts({ ...transaction });
 
     if (transaction[EXPENSE_DETAILS.PAID_BY] === currentUser) {
       transaction[EXPENSE_DETAILS.SPLIT_BETWEEN].forEach((user) => {
         if (user !== currentUser) {
           if (records[user] !== undefined) {
-            records[user] -= splittedAmount;
+            records[user] -= splittedAmounts[user];
           } else {
-            records[user] = -splittedAmount;
+            records[user] = -splittedAmounts[user];
           }
         }
       });
     } else {
       const user = transaction[EXPENSE_DETAILS.PAID_BY];
       if (records[user]) {
-        records[user] += splittedAmount;
+        records[user] += splittedAmounts[currentUser];
       } else {
-        records[user] = splittedAmount;
+        records[user] = splittedAmounts[currentUser];
       }
     }
   });
   const youOwe = floatToFixed(Object.values(records).reduce((total, currentValue) => total + Math.max(0, currentValue), 0));
-  // console.log(youOwe);
   const youAreOwed = floatToFixed(Object.values(records).reduce((total, currentValue) => total + Math.abs(Math.min(0, currentValue)), 0));
   return (
     <div className={styles.container}>

@@ -7,7 +7,7 @@ import USER_PROFILE from '../../../../constants/userProfile.constants';
 import styles from './register.module.css';
 import AUTH_ERRORS from '../../../../constants/authErrors.constants';
 import ROUTES from '../../constants/routes';
-import VALIDATION_RULES from '../../../../constants/validationRules';
+import VALIDATION_RULES from '../../../../constants/authDetailsValidationRules';
 import AUTH_REDUCER from '../../../../redux/constants/authReducer.actionTypes';
 
 const Register = () => {
@@ -23,7 +23,7 @@ const Register = () => {
         form.setFields([
           {
             name: USER_PROFILE.USERNAME,
-            errors: [err],
+            errors: [err.message],
           },
         ]);
       }

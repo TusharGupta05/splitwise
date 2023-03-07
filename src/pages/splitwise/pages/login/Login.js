@@ -8,7 +8,7 @@ import styles from './login.module.css';
 import USER_PROFILE from '../../../../constants/userProfile.constants';
 import AUTH_ERRORS from '../../../../constants/authErrors.constants';
 import ROUTES from '../../constants/routes';
-import VALIDATION_RULES from '../../../../constants/validationRules';
+import VALIDATION_RULES from '../../../../constants/authDetailsValidationRules';
 import AUTH_REDUCER from '../../../../redux/constants/authReducer.actionTypes';
 
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
         form.setFields([
           {
             name: USER_PROFILE.PASSWORD,
-            errors: [err],
+            errors: [err.message],
           },
         ]);
       }

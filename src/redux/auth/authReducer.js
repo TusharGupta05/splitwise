@@ -5,8 +5,8 @@ import AUTH_REDUCER from '../constants/authReducer.actionTypes';
 import { setItemInLocalStorage, getItemFromLocalStorage } from '../../helpers/localStorage';
 
 const authInitialState = {
-  currentUser: getItemFromLocalStorage(LS_CACHE_KEYS.CURRENT_USER),
-  registeredUsers: getItemFromLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS),
+  currentUser: getItemFromLocalStorage(LS_CACHE_KEYS.CURRENT_USER) || '',
+  registeredUsers: getItemFromLocalStorage(LS_CACHE_KEYS.REGISTERED_USERS) || [],
 };
 
 const handleUserChange = produce((state, action) => {

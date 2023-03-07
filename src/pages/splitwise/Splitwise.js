@@ -9,6 +9,9 @@ import CheckAuth from './components/checkauth/CheckAuth';
 import NavBars from './components/navbars';
 import ROUTES from './constants/routes';
 import AddExpense from './pages/addexpense';
+import Analytics from './pages/analytics';
+import CategoricalAnalytics from './pages/analytics/categoricalanalytics/CategoricalAnalytics';
+import AllExpenses from './pages/analytics/allexpensesanalytics/AllExpenses';
 
 const Splitwise = () => (
   <Routes>
@@ -23,6 +26,10 @@ const Splitwise = () => (
         <Route path={ROUTES.DASHBOARD_ROUTE} element={<Dashboard />} />
         <Route path={ROUTES.TRANSACTIONS_ROUTE} element={<Transactions />} />
         <Route path={ROUTES.ADD_EXPENSE_ROUTE} element={<AddExpense />} />
+        <Route path={ROUTES.ANALYTICS} element={<Analytics />}>
+          <Route path={ROUTES.CATEGORIES_ANALYTICS} element={<CategoricalAnalytics />} />
+          <Route path={ROUTES.ALL_EXPENSES_ANALYTICS} element={<AllExpenses />} />
+        </Route>
       </Route>
     </Route>
     <Route path="*" element={<Navigate to={ROUTES.DASHBOARD_ROUTE} />} />

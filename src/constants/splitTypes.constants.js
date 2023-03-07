@@ -1,0 +1,9 @@
+const SPLIT_TYPES = { EQUAL: 'equal', AMOUNT: 'amount', PERCENT: 'percent' };
+
+const SPLIT_TYPES_DESCRIPTORS = {
+  [SPLIT_TYPES.EQUAL]: '=',
+  [SPLIT_TYPES.AMOUNT]: '₹',
+  [SPLIT_TYPES.PERCENT]: '%',
+};
+
+export { SPLIT_TYPES, SPLIT_TYPES_DESCRIPTORS };
