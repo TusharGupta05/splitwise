@@ -90,7 +90,9 @@ const CategoricalAnalytics = () => {
   }));
   return (
     <div className={styles.container}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div className={styles.container}>
+        <DatePicker.RangePicker onChange={setDateRange} />
+        <div style={{ height: '20px' }} />
         <Radio.Group
           value={selectedCategory}
           buttonStyle="solid"
@@ -104,8 +106,6 @@ const CategoricalAnalytics = () => {
             </Radio.Button>
           ))}
         </Radio.Group>
-        <div style={{ width: '20px' }} />
-        <DatePicker.RangePicker onChange={setDateRange} />
       </div>
       <PieChart data={pieChartData} titleText="" name="Amount" />
 
