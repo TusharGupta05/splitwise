@@ -84,10 +84,10 @@ const CategoricalAnalytics = () => {
 
   const [selectedCategory, setSelectedCategory] = useState(Object.keys(pieChartDataRaw).length > 0 ? Object.keys(pieChartDataRaw)[0] : null);
   const pieChartData = Object.entries(pieChartDataRaw[selectedCategory] ?? {}).map(([category, expense]) => ({
-    type: 'pie',
     name: category,
     y: floatToFixed(expense),
   }));
+  console.log(columnChartSeries);
   return (
     <div className={styles.container}>
       <div className={styles.container}>

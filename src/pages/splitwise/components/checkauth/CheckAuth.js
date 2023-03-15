@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import ROUTES from '../../constants/routes';
 import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
+import PropTypes from 'prop-types';
 
 const CheckAuth = ({ isAuthRequired }) => {
   const currentUser = useSelector((reduxStore) => reduxStore[REDUCER_NAMES.AUTH].currentUser);
@@ -16,6 +17,10 @@ const CheckAuth = ({ isAuthRequired }) => {
     return <Navigate to={ROUTES.DASHBOARD_ROUTE} />;
   }
   return <Outlet />;
+};
+
+CheckAuth.propTypes = {
+  isAuthRequired: PropTypes.bool,
 };
 
 export default CheckAuth;

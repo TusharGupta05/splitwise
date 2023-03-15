@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Select } from 'antd';
 import { REDUCER_NAMES } from '../../../../constants/reducers.constants';
 
@@ -36,6 +37,15 @@ const SelectUsers = ({ mode = 'single', placeholder, defaultValue, onChange, for
       }))}
     />
   );
+};
+
+SelectUsers.propTypes = {
+  mode: PropTypes.string,
+  placeholder: PropTypes.string,
+  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+  onChange: PropTypes.func,
+  form: PropTypes.object,
+  style: PropTypes.object,
 };
 
 export default SelectUsers;

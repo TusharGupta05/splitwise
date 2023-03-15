@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 
 const EditableComponent = ({ path, childComponentProps, component }) => {
   const Component = component;
@@ -13,6 +14,12 @@ const EditableComponent = ({ path, childComponentProps, component }) => {
     childCompProps.defaultValue = defaultValue;
   }
   return <Component {...childCompProps} />;
+};
+
+EditableComponent.propTypes = {
+  path: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])).isRequired,
+  childCompProps: PropTypes.object,
+  component: PropTypes.oneOfType([PropTypes.element, PropTypes.func, PropTypes.object]),
 };
 
 export default EditableComponent;
