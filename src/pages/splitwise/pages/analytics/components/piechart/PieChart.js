@@ -33,7 +33,7 @@ PieChart.propTypes = {
       name: PropTypes.string,
       y: PropTypes.number,
     }).isRequired,
-  ),
+  ).isRequired,
 };
 
 export default PieChart;

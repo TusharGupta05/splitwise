@@ -18,8 +18,8 @@ const EditableComponent = ({ path, childComponentProps, component }) => {
 
 EditableComponent.propTypes = {
   path: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])).isRequired,
-  childCompProps: PropTypes.object,
-  component: PropTypes.oneOfType([PropTypes.element, PropTypes.func, PropTypes.object]),
+  childComponentProps: PropTypes.object.isRequired,
+  component: PropTypes.oneOfType([PropTypes.element, PropTypes.func, PropTypes.object]).isRequired,
 };
 
 export default EditableComponent;

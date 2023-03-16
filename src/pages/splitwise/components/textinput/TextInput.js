@@ -12,4 +12,10 @@ TextInput.propTypes = {
   style: PropTypes.object,
 };
 
+TextInput.defaultProps = {
+  onChange: null,
+  defaultValue: null,
+  style: null,
+};
+
 export default TextInput;

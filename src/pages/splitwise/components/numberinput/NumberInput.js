@@ -1,7 +1,7 @@
 import React from 'react';
 import { InputNumber } from 'antd';
-import floatToFixed from '../../../../helpers/floatToFixed';
 import PropTypes from 'prop-types';
+import floatToFixed from '../../../../helpers/floatToFixed';
 
 const NumberInput = ({ form, name, onChange, defaultValue, value, addonBefore, min, disabled, style }) => (
   <InputNumber
@@ -32,6 +32,18 @@ NumberInput.propTypes = {
   min: PropTypes.number,
   disabled: PropTypes.bool,
   style: PropTypes.object,
+};
+
+NumberInput.defaultProps = {
+  form: null,
+  name: null,
+  onChange: null,
+  defaultValue: null,
+  value: null,
+  addonBefore: null,
+  min: null,
+  disabled: false,
+  style: null,
 };
 
 export default NumberInput;

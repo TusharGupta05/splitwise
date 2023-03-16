@@ -1,4 +1,5 @@
-import { DatePicker, Table, Select, Card } from 'antd';
+import { DatePicker, Table, Select, Card, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import _debounce from 'lodash/debounce';
@@ -74,8 +75,25 @@ const renderColumn =
     }
   };
 
+const renderCustomFilter = ({ selectedKeys, setSelectedKeys, confirm }) => (
+  <Input
+    autoFocus
+    value={selectedKeys[0]}
+    placeholder="Search Description"
+    onChange={(e) => {
+      setSelectedKeys(e.target.value ? [e.target.value] : []);
+    }}
+    onPressEnter={() => {
+      confirm();
+    }}
+    style={{ marginBottom: 8, display: 'block' }}
+  />
+);
+
+const renderFilterIcon = (filtered) => <SearchOutlined style={{ color: filtered ? '#1ac29f' : undefined }} />;
+
 const Transactions = () => {
-  const [filterParams, setFilterParams] = useSearchParams({});
+  const [filterParams, setFilterParams] = useSearchParams();
   const dispatch = useDispatch();
   const transactionsNum = useSelector((store) => store[REDUCER_NAMES.TRANSACTIONS].length, shallowEqual);
   const { registeredUsers } = reduxStore.getState()[REDUCER_NAMES.AUTH];
@@ -88,10 +106,19 @@ const Transactions = () => {
       }, 1000),
     [dispatch],
   );
-  const filters = registeredUsers.map((registeredUser) => ({
-    text: registeredUser[USER_PROFILE.USERNAME],
-    value: registeredUser[USER_PROFILE.USERNAME],
-  }));
+  const filters = {
+    [EXPENSE_DETAILS.PAID_BY]: registeredUsers.map((registeredUser) => ({
+      text: registeredUser[USER_PROFILE.USERNAME],
+      value: registeredUser[USER_PROFILE.USERNAME],
+    })),
+    [EXPENSE_DETAILS.SPLIT_BETWEEN]: registeredUsers.map((registeredUser) => ({
+      text: registeredUser[USER_PROFILE.USERNAME],
+      value: registeredUser[USER_PROFILE.USERNAME],
+    })),
+    [EXPENSE_DETAILS.DESCRIPTION]: transactions.map(
+      (transaction) => reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][transaction.key][EXPENSE_DETAILS.DESCRIPTION],
+    ),
+  };
 
   return (
     <Table
@@ -105,7 +132,10 @@ const Transactions = () => {
           dataIndex: column,
           key: column,
           render: renderColumn(column, handleChange),
-          filters: EXPENSE_DETAILS.PAID_BY === column || EXPENSE_DETAILS.SPLIT_BETWEEN === column ? filters : null,
+          filters:
+            EXPENSE_DETAILS.PAID_BY === column || EXPENSE_DETAILS.SPLIT_BETWEEN === column || EXPENSE_DETAILS.DESCRIPTION === column
+              ? filters[column]
+              : null,
           sorter:
             column === EXPENSE_DETAILS.AMOUNT
               ? (record1, record2) =>
@@ -115,10 +145,17 @@ const Transactions = () => {
           defaultSortOrder: column === EXPENSE_DETAILS.AMOUNT && filterParams.getAll(column) ? filterParams.getAll(column)[0] : undefined,
           sortDirections: column === EXPENSE_DETAILS.AMOUNT ? ['ascend', 'descend'] : null,
           defaultFilteredValue:
-            (column === EXPENSE_DETAILS.PAID_BY || column === EXPENSE_DETAILS.SPLIT_BETWEEN) && filterParams.getAll(column).length > 0
+            (column === EXPENSE_DETAILS.PAID_BY || column === EXPENSE_DETAILS.SPLIT_BETWEEN || column === EXPENSE_DETAILS.DESCRIPTION) &&
+            filterParams.getAll(column).length > 0
               ? filterParams.getAll(column)
               : null,
+          filterIcon: column === EXPENSE_DETAILS.DESCRIPTION ? renderFilterIcon : null,
+
+          filterDropdown: column === EXPENSE_DETAILS.DESCRIPTION ? renderCustomFilter : null,
           onFilter: (value, record) => {
+            if (column === EXPENSE_DETAILS.DESCRIPTION) {
+              return reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column].toLowerCase().includes(value.toLowerCase());
+            }
             if (column === EXPENSE_DETAILS.PAID_BY && reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column] === value) {
               return true;
             } else if (
@@ -131,13 +168,17 @@ const Transactions = () => {
           },
         }))}
       onChange={(_, fil, sortOrder) => {
-        const newFilters = Object.keys(fil)
-          .filter((key) => fil[key] !== null)
-          .reduce((prev, key) => ({ ...prev, [key]: fil[key] }), filterParams);
+        const newSearchParams = new URLSearchParams();
+        Object.entries(fil).forEach(([filterName, filterValue]) => {
+          filterValue?.forEach((val) => {
+            newSearchParams.append(filterName, val);
+          });
+        });
         if (sortOrder && sortOrder.order) {
-          newFilters[EXPENSE_DETAILS.AMOUNT] = [sortOrder.order];
+          newSearchParams.append(EXPENSE_DETAILS.AMOUNT, sortOrder.order);
         }
-        setFilterParams(newFilters);
+
+        setFilterParams(newSearchParams);
       }}
       pagination={{ pageSize: 5 }}
     />
@@ -145,3 +186,130 @@ const Transactions = () => {
 };
 
 export default Transactions;
+
+// const App: React.FC = () => {
+//   const [searchText, setSearchText] = useState('');
+//   const [searchedColumn, setSearchedColumn] = useState('');
+//   const searchInput = useRef<InputRef>(null);
+
+//   const handleSearch = (
+//     selectedKeys: string[],
+//     confirm: (param?: FilterConfirmProps) => void,
+//     dataIndex: DataIndex,
+//   ) => {
+//     confirm();
+//     setSearchText(selectedKeys[0]);
+//     setSearchedColumn(dataIndex);
+//   };
+
+//   const handleReset = (clearFilters: () => void) => {
+//     clearFilters();
+//     setSearchText('');
+//   };
+
+//   const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<DataType> => ({
+//     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+//       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+//         <Input
+//           ref={searchInput}
+//           placeholder={`Search ${dataIndex}`}
+//           value={selectedKeys[0]}
+//           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+//           onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+//           style={{ marginBottom: 8, display: 'block' }}
+//         />
+//         <Space>
+//           <Button
+//             type="primary"
+//             onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+//             icon={<SearchOutlined />}
+//             size="small"
+//             style={{ width: 90 }}
+//           >
+//             Search
+//           </Button>
+//           <Button
+//             onClick={() => clearFilters && handleReset(clearFilters)}
+//             size="small"
+//             style={{ width: 90 }}
+//           >
+//             Reset
+//           </Button>
+//           <Button
+//             type="link"
+//             size="small"
+//             onClick={() => {
+//               confirm({ closeDropdown: false });
+//               setSearchText((selectedKeys as string[])[0]);
+//               setSearchedColumn(dataIndex);
+//             }}
+//           >
+//             Filter
+//           </Button>
+//           <Button
+//             type="link"
+//             size="small"
+//             onClick={() => {
+//               close();
+//             }}
+//           >
+//             close
+//           </Button>
+//         </Space>
+//       </div>
+//     ),
+//     filterIcon: (filtered: boolean) => (
+//       <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+//     ),
+//     onFilter: (value, record) =>
+//       record[dataIndex]
+//         .toString()
+//         .toLowerCase()
+//         .includes((value as string).toLowerCase()),
+//     onFilterDropdownOpenChange: (visible) => {
+//       if (visible) {
+//         setTimeout(() => searchInput.current?.select(), 100);
+//       }
+//     },
+//     render: (text) =>
+//       searchedColumn === dataIndex ? (
+//         <Highlighter
+//           highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+//           searchWords={[searchText]}
+//           autoEscape
+//           textToHighlight={text ? text.toString() : ''}
+//         />
+//       ) : (
+//         text
+//       ),
+//   });
+
+//   const columns: ColumnsType<DataType> = [
+//     {
+//       title: 'Name',
+//       dataIndex: 'name',
+//       key: 'name',
+//       width: '30%',
+//       ...getColumnSearchProps('name'),
+//     },
+//     {
+//       title: 'Age',
+//       dataIndex: 'age',
+//       key: 'age',
+//       width: '20%',
+//       ...getColumnSearchProps('age'),
+//     },
+//     {
+//       title: 'Address',
+//       dataIndex: 'address',
+//       key: 'address',
+//       ...getColumnSearchProps('address'),
+//       sorter: (a, b) => a.address.length - b.address.length,
+//       sortDirections: ['descend', 'ascend'],
+//     },
+//   ];
+
+//   return <Table columns={columns} dataSource={data} />;
+// };
+
+// export default App;

@@ -48,4 +48,13 @@ SelectUsers.propTypes = {
   style: PropTypes.object,
 };
 
+SelectUsers.defaultProps = {
+  mode: 'single',
+  placeholder: null,
+  defaultValue: undefined,
+  onChange: null,
+  form: null,
+  style: null,
+};
+
 export default SelectUsers;

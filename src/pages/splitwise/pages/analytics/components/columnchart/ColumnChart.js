@@ -47,4 +47,9 @@ ColumnChart.propTypes = {
   ).isRequired,
 };
 
+ColumnChart.defaultProps = {
+  xAxisTitleText: 'Months',
+  yAxisTitleText: 'Amount(₹)',
+};
+
 export default ColumnChart;
