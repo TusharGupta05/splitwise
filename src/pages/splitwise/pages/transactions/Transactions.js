@@ -34,7 +34,8 @@ const renderColumn =
       case EXPENSE_DETAILS.AMOUNT:
         childComponentProps.style = { width: '100px' };
         return <EditableComponent path={path} {...{ childComponentProps }} component={NumberInput} />;
-      case EXPENSE_DETAILS.SPLIT_BETWEEN:
+      // case EXPENSE_DETAILS.SPLIT_BETWEEN:
+      case EXPENSE_DETAILS.SPLITTED_PARTS:
         childComponentProps.style = { width: '150px' };
         childComponentProps.mode = 'multiple';
         childComponentProps.removeIcon = '';
@@ -54,7 +55,7 @@ const renderColumn =
         childComponentProps.onChange = (newValue) => onChange(newValue.label);
         return <EditableComponent path={path} {...{ childComponentProps }} component={EditableSelect} />;
 
-      case EXPENSE_DETAILS.SPLITTED_PARTS:
+      case EXPENSE_DETAILS.SPLIT_BETWEEN:
         return (
           <Card>
             {Object.entries(calculateSplittedAmounts({ ...reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][index] })).map(([user, amount]) => (
