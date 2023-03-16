@@ -3,9 +3,8 @@ import { InputNumber } from 'antd';
 import PropTypes from 'prop-types';
 import floatToFixed from '../../../../helpers/floatToFixed';
 
-const NumberInput = ({ form, name, onChange, defaultValue, value, addonBefore, min, disabled, style }) => (
+const NumberInput = ({ form, name, onChange, value, addonBefore, min, disabled, style }) => (
   <InputNumber
-    defaultValue={defaultValue}
     value={value}
     parser={(newValue) => {
       const regExp = /^\d+(\.\d{0,13})?$/;
@@ -26,7 +25,6 @@ NumberInput.propTypes = {
   form: PropTypes.object,
   name: PropTypes.string,
   onChange: PropTypes.func,
-  defaultValue: PropTypes.number,
   value: PropTypes.number,
   addonBefore: PropTypes.string,
   min: PropTypes.number,
@@ -38,7 +36,6 @@ NumberInput.defaultProps = {
   form: null,
   name: null,
   onChange: null,
-  defaultValue: null,
   value: null,
   addonBefore: null,
   min: null,

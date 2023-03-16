@@ -87,7 +87,6 @@ const CategoricalAnalytics = () => {
     name: category,
     y: floatToFixed(expense),
   }));
-  console.log(columnChartSeries);
   return (
     <div className={styles.container}>
       <div className={styles.container}>
@@ -114,7 +113,7 @@ const CategoricalAnalytics = () => {
         <div style={{ width: '10px' }} />
         <Select
           mode="multiple"
-          defaultValue={selectedCategories}
+          value={selectedCategories}
           placeholder="Select categories"
           style={{ width: '120px' }}
           options={Object.keys(columnChartDataRaw).map((option) => ({ label: option, value: option }))}

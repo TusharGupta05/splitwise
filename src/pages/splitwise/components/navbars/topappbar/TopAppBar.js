@@ -26,7 +26,7 @@ const TopAppBar = () => {
         <div>Splitwise</div>
       </div>
       <div className={styles.container}>
-        <SelectUser defaultValue={currentUser} onChange={handleChange} />
+        <SelectUser value={currentUser} onChange={handleChange} />
         <div className={styles.spacer} />
       </div>
     </div>

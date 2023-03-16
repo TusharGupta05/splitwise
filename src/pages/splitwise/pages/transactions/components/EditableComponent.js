@@ -6,12 +6,12 @@ import PropTypes from 'prop-types';
 
 const EditableComponent = ({ path, childComponentProps, component }) => {
   const Component = component;
-  const defaultValue = useSelector((reduxStore) => _.get(reduxStore, path));
+  const value = useSelector((reduxStore) => _.get(reduxStore, path));
   const childCompProps = { ...childComponentProps };
   if (path.findIndex((val) => val === 'date') !== -1) {
-    childCompProps.defaultValue = dayjs(defaultValue);
+    childCompProps.value = dayjs(value);
   } else {
-    childCompProps.defaultValue = defaultValue;
+    childCompProps.value = value;
   }
   return <Component {...childCompProps} />;
 };
