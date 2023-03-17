@@ -38,7 +38,7 @@ const AddExpense = () => {
     ({ total, ...expenseDetails }) => {
       dispatch({
         type: TRANSACTIONS_REDUCER.HANDLE_ADD_EXPENSE,
-        payload: { ...expenseDetails, [EXPENSE_DETAILS.CATEGORY]: expenseDetails[EXPENSE_DETAILS.CATEGORY].value },
+        payload: expenseDetails,
       });
       navigate(ROUTES.DASHBOARD_ROUTE);
     },
@@ -46,10 +46,7 @@ const AddExpense = () => {
   );
   const handleChange = useCallback(
     (name) => (newValue) => {
-      // console.log(name);
-      // console.log(newValue);
       form.setFieldValue(name, newValue);
-
       const oldSplittedAmounts = form.getFieldValue(EXPENSE_DETAILS.SPLITTED_PARTS);
       const newSplittedAmounts = calculateSplittedAmounts({
         ...form.getFieldsValue([EXPENSE_DETAILS.AMOUNT, EXPENSE_DETAILS.SPLITTED_PARTS, EXPENSE_DETAILS.SPLIT_BETWEEN, EXPENSE_DETAILS.SPLIT_TYPE]),
@@ -60,6 +57,8 @@ const AddExpense = () => {
     },
     [form],
   );
+
+  const handleCategoryChange = useCallback((newCategory) => handleChange(EXPENSE_DETAILS.CATEGORY)(newCategory.value), [handleChange]);
   return (
     <div className={styles.container}>
       <h4>Add a new expense</h4>
@@ -103,7 +102,7 @@ const AddExpense = () => {
             <Form.Item label="Category" rules={EXPENSE_DETAILS_VALIDATION_RULES[EXPENSE_DETAILS.CATEGORY]} name={EXPENSE_DETAILS.CATEGORY}>
               <EditableSelect
                 style={{ width: '157px' }}
-                onChange={handleChange(EXPENSE_DETAILS.CATEGORY)}
+                onChange={handleCategoryChange}
                 options={CATEGORY_OPTIONS.map((option) => ({ value: option.toLowerCase(), label: option }))}
               />
             </Form.Item>
