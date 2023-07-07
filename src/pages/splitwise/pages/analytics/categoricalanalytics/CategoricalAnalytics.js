@@ -84,13 +84,14 @@ const CategoricalAnalytics = () => {
 
   const [selectedCategory, setSelectedCategory] = useState(Object.keys(pieChartDataRaw).length > 0 ? Object.keys(pieChartDataRaw)[0] : null);
   const pieChartData = Object.entries(pieChartDataRaw[selectedCategory] ?? {}).map(([category, expense]) => ({
-    type: 'pie',
     name: category,
     y: floatToFixed(expense),
   }));
   return (
     <div className={styles.container}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div className={styles.container}>
+        <DatePicker.RangePicker onChange={setDateRange} />
+        <div style={{ height: '20px' }} />
         <Radio.Group
           value={selectedCategory}
           buttonStyle="solid"
@@ -104,8 +105,6 @@ const CategoricalAnalytics = () => {
             </Radio.Button>
           ))}
         </Radio.Group>
-        <div style={{ width: '20px' }} />
-        <DatePicker.RangePicker onChange={setDateRange} />
       </div>
       <PieChart data={pieChartData} titleText="" name="Amount" />
 
@@ -114,7 +113,7 @@ const CategoricalAnalytics = () => {
         <div style={{ width: '10px' }} />
         <Select
           mode="multiple"
-          defaultValue={selectedCategories}
+          value={selectedCategories}
           placeholder="Select categories"
           style={{ width: '120px' }}
           options={Object.keys(columnChartDataRaw).map((option) => ({ label: option, value: option }))}

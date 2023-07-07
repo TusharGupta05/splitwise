@@ -1,4 +1,5 @@
-import { DatePicker, Table, Select, Card } from 'antd';
+import { DatePicker, Table, Select, Card, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import _debounce from 'lodash/debounce';
@@ -15,7 +16,6 @@ import USER_PROFILE from '../../../../constants/userProfile.constants';
 import CATEGORY_OPTIONS from '../../constants/categories.constants';
 import calculateSplittedAmounts from '../../../../helpers/calculateSplittedAmounts';
 import EditableSelect from '../../components/editableselect/EditableSelect';
-import { capitalizeFirst } from '../../../../helpers/capitalizeFirst';
 
 const renderColumn =
   (property, handleChange) =>
@@ -32,15 +32,16 @@ const renderColumn =
         childComponentProps.style = { width: '100px' };
         return <EditableComponent path={path} {...{ childComponentProps }} component={SelectUsers} />;
       case EXPENSE_DETAILS.AMOUNT:
-        childComponentProps.style = { width: '80px' };
+        childComponentProps.style = { width: '100px' };
         return <EditableComponent path={path} {...{ childComponentProps }} component={NumberInput} />;
-      case EXPENSE_DETAILS.SPLIT_BETWEEN:
+      // case EXPENSE_DETAILS.SPLIT_BETWEEN:
+      case EXPENSE_DETAILS.SPLITTED_PARTS:
         childComponentProps.style = { width: '150px' };
         childComponentProps.mode = 'multiple';
         childComponentProps.removeIcon = '';
         return <EditableComponent path={path} {...{ childComponentProps }} component={Select} />;
       case EXPENSE_DETAILS.DESCRIPTION:
-        childComponentProps.style = { width: '120px' };
+        childComponentProps.style = { width: '150px' };
         return <EditableComponent path={path} {...{ childComponentProps }} component={TextInput} />;
       case EXPENSE_DETAILS.DATE:
         childComponentProps.allowClear = false;
@@ -48,17 +49,13 @@ const renderColumn =
         return <EditableComponent path={path} {...{ childComponentProps }} component={DatePicker} />;
       case EXPENSE_DETAILS.CATEGORY:
         childComponentProps.mode = 'tag';
-        childComponentProps.style = { width: '100px' };
+        childComponentProps.style = { width: '100%' };
         childComponentProps.placeholder = 'Select Category';
         childComponentProps.options = CATEGORY_OPTIONS.map((option) => ({ value: option.toLowerCase(), label: option }));
-        childComponentProps.defaultValue = {
-          value: reduxStore.getState()[path[0]][path[1]][path[2]].toLowerCase(),
-          label: capitalizeFirst(reduxStore.getState()[path[0]][path[1]][path[2]]),
-        };
         childComponentProps.onChange = (newValue) => onChange(newValue.label);
-        return <EditableSelect {...childComponentProps} />;
+        return <EditableComponent path={path} {...{ childComponentProps }} component={EditableSelect} />;
 
-      case EXPENSE_DETAILS.SPLITTED_PARTS:
+      case EXPENSE_DETAILS.SPLIT_BETWEEN:
         return (
           <Card>
             {Object.entries(calculateSplittedAmounts({ ...reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][index] })).map(([user, amount]) => (
@@ -74,8 +71,25 @@ const renderColumn =
     }
   };
 
+const renderCustomFilter = ({ selectedKeys, setSelectedKeys, confirm }) => (
+  <Input
+    autoFocus
+    value={selectedKeys[0]}
+    placeholder="Search Description"
+    onChange={(e) => {
+      setSelectedKeys(e.target.value ? [e.target.value] : []);
+    }}
+    onPressEnter={() => {
+      confirm();
+    }}
+    style={{ marginBottom: 8, display: 'block' }}
+  />
+);
+
+const renderFilterIcon = (filtered) => <SearchOutlined style={{ color: filtered ? '#1ac29f' : undefined }} />;
+
 const Transactions = () => {
-  const [filterParams, setFilterParams] = useSearchParams({});
+  const [filterParams, setFilterParams] = useSearchParams();
   const dispatch = useDispatch();
   const transactionsNum = useSelector((store) => store[REDUCER_NAMES.TRANSACTIONS].length, shallowEqual);
   const { registeredUsers } = reduxStore.getState()[REDUCER_NAMES.AUTH];
@@ -88,10 +102,19 @@ const Transactions = () => {
       }, 1000),
     [dispatch],
   );
-  const filters = registeredUsers.map((registeredUser) => ({
-    text: registeredUser[USER_PROFILE.USERNAME],
-    value: registeredUser[USER_PROFILE.USERNAME],
-  }));
+  const filters = {
+    [EXPENSE_DETAILS.PAID_BY]: registeredUsers.map((registeredUser) => ({
+      text: registeredUser[USER_PROFILE.USERNAME],
+      value: registeredUser[USER_PROFILE.USERNAME],
+    })),
+    [EXPENSE_DETAILS.SPLIT_BETWEEN]: registeredUsers.map((registeredUser) => ({
+      text: registeredUser[USER_PROFILE.USERNAME],
+      value: registeredUser[USER_PROFILE.USERNAME],
+    })),
+    [EXPENSE_DETAILS.DESCRIPTION]: transactions.map(
+      (transaction) => reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][transaction.key][EXPENSE_DETAILS.DESCRIPTION],
+    ),
+  };
 
   return (
     <Table
@@ -105,7 +128,10 @@ const Transactions = () => {
           dataIndex: column,
           key: column,
           render: renderColumn(column, handleChange),
-          filters: EXPENSE_DETAILS.PAID_BY === column || EXPENSE_DETAILS.SPLIT_BETWEEN === column ? filters : null,
+          filters:
+            EXPENSE_DETAILS.PAID_BY === column || EXPENSE_DETAILS.SPLIT_BETWEEN === column || EXPENSE_DETAILS.DESCRIPTION === column
+              ? filters[column]
+              : null,
           sorter:
             column === EXPENSE_DETAILS.AMOUNT
               ? (record1, record2) =>
@@ -115,10 +141,17 @@ const Transactions = () => {
           defaultSortOrder: column === EXPENSE_DETAILS.AMOUNT && filterParams.getAll(column) ? filterParams.getAll(column)[0] : undefined,
           sortDirections: column === EXPENSE_DETAILS.AMOUNT ? ['ascend', 'descend'] : null,
           defaultFilteredValue:
-            (column === EXPENSE_DETAILS.PAID_BY || column === EXPENSE_DETAILS.SPLIT_BETWEEN) && filterParams.getAll(column).length > 0
+            (column === EXPENSE_DETAILS.PAID_BY || column === EXPENSE_DETAILS.SPLIT_BETWEEN || column === EXPENSE_DETAILS.DESCRIPTION) &&
+            filterParams.getAll(column).length > 0
               ? filterParams.getAll(column)
               : null,
+          filterIcon: column === EXPENSE_DETAILS.DESCRIPTION ? renderFilterIcon : null,
+
+          filterDropdown: column === EXPENSE_DETAILS.DESCRIPTION ? renderCustomFilter : null,
           onFilter: (value, record) => {
+            if (column === EXPENSE_DETAILS.DESCRIPTION) {
+              return reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column].toLowerCase().includes(value.toLowerCase());
+            }
             if (column === EXPENSE_DETAILS.PAID_BY && reduxStore.getState()[REDUCER_NAMES.TRANSACTIONS][record.key][column] === value) {
               return true;
             } else if (
@@ -131,13 +164,17 @@ const Transactions = () => {
           },
         }))}
       onChange={(_, fil, sortOrder) => {
-        const newFilters = Object.keys(fil)
-          .filter((key) => fil[key] !== null)
-          .reduce((prev, key) => ({ ...prev, [key]: fil[key] }), filterParams);
+        const newSearchParams = new URLSearchParams();
+        Object.entries(fil).forEach(([filterName, filterValue]) => {
+          filterValue?.forEach((val) => {
+            newSearchParams.append(filterName, val);
+          });
+        });
         if (sortOrder && sortOrder.order) {
-          newFilters[EXPENSE_DETAILS.AMOUNT] = [sortOrder.order];
+          newSearchParams.append(EXPENSE_DETAILS.AMOUNT, sortOrder.order);
         }
-        setFilterParams(newFilters);
+
+        setFilterParams(newSearchParams);
       }}
       pagination={{ pageSize: 5 }}
     />

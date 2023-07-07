@@ -1,10 +1,23 @@
 import React, { useCallback } from 'react';
 import CreatableSelect from 'react-select/creatable';
+import { capitalizeFirst } from '../../../../helpers/capitalizeFirst';
 
 const EditableSelect = (props) => {
+  const newProps = { ...props };
+  if (newProps.value) {
+    newProps.value = {
+      value: newProps.value,
+      label: capitalizeFirst(newProps.value),
+    };
+  }
   const theme = useCallback(
     (baseTheme) => ({
       ...baseTheme,
+      spacing: {
+        ...baseTheme.spacing,
+        controlHeight: 10,
+        baseUnit: 3,
+      },
       borderRadius: 5,
       colors: {
         ...baseTheme.colors,
@@ -17,7 +30,17 @@ const EditableSelect = (props) => {
     }),
     [],
   );
-  return <CreatableSelect {...props} theme={theme} />;
+  return (
+    <div style={newProps.style}>
+      <CreatableSelect
+        {...newProps}
+        theme={theme}
+        components={{
+          IndicatorSeparator: () => null,
+        }}
+      />
+    </div>
+  );
 };
 
 export default EditableSelect;

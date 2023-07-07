@@ -4,8 +4,8 @@ const EXPENSE_DETAILS = {
   CATEGORY: 'category',
   DATE: 'date',
   AMOUNT: 'amount',
-  SPLITTED_PARTS: 'splittedParts',
   SPLIT_BETWEEN: 'splitBetween',
+  SPLITTED_PARTS: 'splittedParts',
   SPLIT_TYPE: 'splitType',
 };
 

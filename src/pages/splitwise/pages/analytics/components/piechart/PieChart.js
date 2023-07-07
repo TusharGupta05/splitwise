@@ -1,6 +1,7 @@
 import React from 'react';
 import HighCharts from 'highcharts';
 import Piechart from 'highcharts-react-official';
+import PropTypes from 'prop-types';
 
 const PieChart = ({ titleText, name, data }) => {
   const options = {
@@ -22,6 +23,17 @@ const PieChart = ({ titleText, name, data }) => {
     ],
   };
   return <Piechart highcharts={HighCharts} options={options} />;
+};
+
+PieChart.propTypes = {
+  titleText: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.exact({
+      name: PropTypes.string,
+      y: PropTypes.number,
+    }).isRequired,
+  ).isRequired,
 };
 
 export default PieChart;

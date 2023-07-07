@@ -38,7 +38,7 @@ const AddExpense = () => {
     ({ total, ...expenseDetails }) => {
       dispatch({
         type: TRANSACTIONS_REDUCER.HANDLE_ADD_EXPENSE,
-        payload: { ...expenseDetails, [EXPENSE_DETAILS.CATEGORY]: expenseDetails[EXPENSE_DETAILS.CATEGORY].value },
+        payload: expenseDetails,
       });
       navigate(ROUTES.DASHBOARD_ROUTE);
     },
@@ -46,10 +46,7 @@ const AddExpense = () => {
   );
   const handleChange = useCallback(
     (name) => (newValue) => {
-      // console.log(name);
-      // console.log(newValue);
       form.setFieldValue(name, newValue);
-
       const oldSplittedAmounts = form.getFieldValue(EXPENSE_DETAILS.SPLITTED_PARTS);
       const newSplittedAmounts = calculateSplittedAmounts({
         ...form.getFieldsValue([EXPENSE_DETAILS.AMOUNT, EXPENSE_DETAILS.SPLITTED_PARTS, EXPENSE_DETAILS.SPLIT_BETWEEN, EXPENSE_DETAILS.SPLIT_TYPE]),
@@ -60,6 +57,8 @@ const AddExpense = () => {
     },
     [form],
   );
+
+  const handleCategoryChange = useCallback((newCategory) => handleChange(EXPENSE_DETAILS.CATEGORY)(newCategory.value), [handleChange]);
   return (
     <div className={styles.container}>
       <h4>Add a new expense</h4>
@@ -79,7 +78,7 @@ const AddExpense = () => {
               <NumberInput
                 onChange={handleChange(EXPENSE_DETAILS.AMOUNT)}
                 form={form}
-                style={{ width: '100px' }}
+                style={{ width: '160px' }}
                 name={EXPENSE_DETAILS.AMOUNT}
                 addonBefore="₹"
                 min={1}
@@ -88,16 +87,22 @@ const AddExpense = () => {
             <Form.Item label="Paid by" name={EXPENSE_DETAILS.PAID_BY} rules={EXPENSE_DETAILS_VALIDATION_RULES[EXPENSE_DETAILS.PAID_BY]}>
               <EditableComponent
                 path={[REDUCER_NAMES.AUTH, 'currentUser']}
-                childComponentProps={{ onChange: handleChange(EXPENSE_DETAILS.PAID_BY), form, name: EXPENSE_DETAILS.PAID_BY }}
+                childComponentProps={{
+                  onChange: handleChange(EXPENSE_DETAILS.PAID_BY),
+                  form,
+                  name: EXPENSE_DETAILS.PAID_BY,
+                  style: { width: '157px' },
+                }}
                 component={SelectUsers}
               />
             </Form.Item>
             <Form.Item name={EXPENSE_DETAILS.DATE} label="Date">
-              <DatePicker allowClear={false} />
+              <DatePicker allowClear={false} style={{ width: '157px' }} />
             </Form.Item>
             <Form.Item label="Category" rules={EXPENSE_DETAILS_VALIDATION_RULES[EXPENSE_DETAILS.CATEGORY]} name={EXPENSE_DETAILS.CATEGORY}>
               <EditableSelect
-                onChange={handleChange(EXPENSE_DETAILS.CATEGORY)}
+                style={{ width: '157px' }}
+                onChange={handleCategoryChange}
                 options={CATEGORY_OPTIONS.map((option) => ({ value: option.toLowerCase(), label: option }))}
               />
             </Form.Item>
@@ -107,10 +112,9 @@ const AddExpense = () => {
               rules={EXPENSE_DETAILS_VALIDATION_RULES[EXPENSE_DETAILS.SPLIT_BETWEEN]}
             >
               <SelectUsers
-                compKey={initialExpenseDetails[EXPENSE_DETAILS.SPLIT_BETWEEN]}
                 mode="multiple"
                 placeholder="Select friends...."
-                style={{ width: '150px' }}
+                style={{ width: '157px' }}
                 name={EXPENSE_DETAILS.SPLIT_BETWEEN}
                 form={form}
                 onChange={handleChange(EXPENSE_DETAILS.SPLIT_BETWEEN)}
@@ -118,7 +122,7 @@ const AddExpense = () => {
             </Form.Item>
 
             <Form.Item name={EXPENSE_DETAILS.DESCRIPTION} label="Description" rules={EXPENSE_DETAILS_VALIDATION_RULES[EXPENSE_DETAILS.DESCRIPTION]}>
-              <Input style={{ width: '150px' }} />
+              <Input style={{ width: '157px' }} />
             </Form.Item>
 
             <Form.Item wrapperCol={{ span: 14, offset: 16 }}>
@@ -144,6 +148,7 @@ const AddExpense = () => {
               style={{ textAlign: 'left', alignItems: 'start' }}
               shouldUpdate={(prevForm, curForm) => {
                 if (
+                  prevForm[EXPENSE_DETAILS.AMOUNT] !== curForm[EXPENSE_DETAILS.AMOUNT] ||
                   prevForm[EXPENSE_DETAILS.SPLIT_BETWEEN] !== curForm[EXPENSE_DETAILS.SPLIT_BETWEEN] ||
                   (prevForm[EXPENSE_DETAILS.SPLIT_TYPE] !== curForm[EXPENSE_DETAILS.SPLIT_TYPE] &&
                     (prevForm[EXPENSE_DETAILS.SPLIT_TYPE] === SPLIT_TYPES.EQUAL || curForm[EXPENSE_DETAILS.SPLIT_TYPE] === SPLIT_TYPES.EQUAL))
