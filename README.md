@@ -1,3 +1,7 @@
+Hosted on: https://splitwise-three.vercel.app/
+
+[Splitwise Demo Video](https://drive.google.com/file/d/1MX_o7wHoTp8s4-oa2LvcWsxbMxcSI8Fm/view?usp=sharing)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
