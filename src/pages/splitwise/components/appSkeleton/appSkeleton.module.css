@@ -1,0 +1,9 @@
+.showMenu {
+  display: block;
+}
+
+@media (min-width:800px) {
+  .showMenu{
+    display: none;
+  }
+}

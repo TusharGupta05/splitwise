@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 const ColumnChart = ({ xAxisTitleText = 'Months', yAxisTitleText = 'Amount(₹)', xAxisCategories, series }) => (
   <Columnchart
+    containerProps={{ style: { height: '100%', width: '100%' } }}
     highcharts={HighCharts}
     options={{
       chart: {

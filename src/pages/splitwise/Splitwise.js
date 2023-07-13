@@ -6,12 +6,12 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Profile from './pages/profile';
 import CheckAuth from './components/checkauth/CheckAuth';
-import NavBars from './components/navbars';
 import ROUTES from './constants/routes';
 import AddExpense from './pages/addexpense';
 import Analytics from './pages/analytics';
 import CategoricalAnalytics from './pages/analytics/categoricalanalytics/CategoricalAnalytics';
 import AllExpenses from './pages/analytics/allexpensesanalytics/AllExpenses';
+import AppSkeleton from './components/appSkeleton/AppSkeleton';
 
 const Splitwise = () => (
   <Routes>
@@ -20,7 +20,7 @@ const Splitwise = () => (
       <Route path={ROUTES.REGISTER_ROUTE} element={<Register />} />
     </Route>
     <Route element={<CheckAuth isAuthRequired />}>
-      <Route element={<NavBars />}>
+      <Route element={<AppSkeleton />}>
         <Route path={ROUTES.LOGOUT_ROUTE} element={<Login />} />
         <Route path={ROUTES.PROFILE_ROUTE} element={<Profile />} />
         <Route path={ROUTES.DASHBOARD_ROUTE} element={<Dashboard />} />
