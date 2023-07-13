@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Col, Form, Input, Radio, Card, DatePicker } from 'antd';
+import { Button, Col, Row, Form, Input, Radio, Card, DatePicker } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './addexpense.module.css';
@@ -59,6 +59,7 @@ const AddExpense = () => {
   );
 
   const handleCategoryChange = useCallback((newCategory) => handleChange(EXPENSE_DETAILS.CATEGORY)(newCategory.value), [handleChange]);
+
   return (
     <div className={styles.container}>
       <h4>Add a new expense</h4>
@@ -72,13 +73,13 @@ const AddExpense = () => {
         layout="horizontal"
         onFinish={handleSubmit}
       >
-        <div style={{ display: 'flex' }}>
-          <Col span={12}>
+        <Row>
+          <Col span={10} offset={2}>
             <Form.Item name={EXPENSE_DETAILS.AMOUNT} label="Enter amount" rules={EXPENSE_DETAILS_VALIDATION_RULES[EXPENSE_DETAILS.AMOUNT]}>
               <NumberInput
                 onChange={handleChange(EXPENSE_DETAILS.AMOUNT)}
                 form={form}
-                style={{ width: '160px' }}
+                style={{ width: '85%' }}
                 name={EXPENSE_DETAILS.AMOUNT}
                 addonBefore="₹"
                 min={1}
@@ -91,17 +92,17 @@ const AddExpense = () => {
                   onChange: handleChange(EXPENSE_DETAILS.PAID_BY),
                   form,
                   name: EXPENSE_DETAILS.PAID_BY,
-                  style: { width: '157px' },
+                  style: { width: '85%' },
                 }}
                 component={SelectUsers}
               />
             </Form.Item>
             <Form.Item name={EXPENSE_DETAILS.DATE} label="Date">
-              <DatePicker allowClear={false} style={{ width: '157px' }} />
+              <DatePicker allowClear={false} style={{ width: '85%' }} />
             </Form.Item>
             <Form.Item label="Category" rules={EXPENSE_DETAILS_VALIDATION_RULES[EXPENSE_DETAILS.CATEGORY]} name={EXPENSE_DETAILS.CATEGORY}>
               <EditableSelect
-                style={{ width: '157px' }}
+                style={{ width: '85%' }}
                 onChange={handleCategoryChange}
                 options={CATEGORY_OPTIONS.map((option) => ({ value: option.toLowerCase(), label: option }))}
               />
@@ -114,7 +115,7 @@ const AddExpense = () => {
               <SelectUsers
                 mode="multiple"
                 placeholder="Select friends...."
-                style={{ width: '157px' }}
+                style={{ width: '85%' }}
                 name={EXPENSE_DETAILS.SPLIT_BETWEEN}
                 form={form}
                 onChange={handleChange(EXPENSE_DETAILS.SPLIT_BETWEEN)}
@@ -122,16 +123,10 @@ const AddExpense = () => {
             </Form.Item>
 
             <Form.Item name={EXPENSE_DETAILS.DESCRIPTION} label="Description" rules={EXPENSE_DETAILS_VALIDATION_RULES[EXPENSE_DETAILS.DESCRIPTION]}>
-              <Input style={{ width: '157px' }} />
-            </Form.Item>
-
-            <Form.Item wrapperCol={{ span: 14, offset: 16 }}>
-              <Button type="primary" htmlType="submit">
-                Add
-              </Button>
+              <Input style={{ width: '85%' }} />
             </Form.Item>
           </Col>
-          <Col span={12} offset={1}>
+          <Col span={10} offset={2}>
             <Form.Item name={EXPENSE_DETAILS.SPLIT_TYPE} labelCol={{ offset: 0 }} labelAlign="left" label="Split Type">
               <Radio.Group onChange={(event) => handleChange(EXPENSE_DETAILS.SPLIT_TYPE)(event.target.value)}>
                 {Object.entries(SPLIT_TYPES_DESCRIPTORS).map(([splitType, descriptor]) => (
@@ -143,7 +138,7 @@ const AddExpense = () => {
             </Form.Item>
             <Form.Item
               labelCol={{ span: 11 }}
-              wrapperCol={{ span: 13 }}
+              wrapperCol={{ span: 11 }}
               form={form}
               style={{ textAlign: 'left', alignItems: 'start' }}
               shouldUpdate={(prevForm, curForm) => {
@@ -210,7 +205,7 @@ const AddExpense = () => {
                 return (
                   <Form.Item
                     name="total"
-                    wrapperCol={{ span: 14, offset: 6 }}
+                    wrapperCol={{ span: 14, offset: 3 }}
                     rules={[
                       {
                         validator: () =>
@@ -230,7 +225,12 @@ const AddExpense = () => {
               }}
             </Form.Item>
           </Col>
-        </div>
+        </Row>
+        <Form.Item wrapperCol={{ offset: 12 }}>
+          <Button type="primary" htmlType="submit">
+            Add
+          </Button>
+        </Form.Item>
       </Form>
     </div>
   );

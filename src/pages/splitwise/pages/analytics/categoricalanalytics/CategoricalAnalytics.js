@@ -19,8 +19,8 @@ const CategoricalAnalytics = () => {
     const prevSeries = { ...acc };
     const date = dayjs(transaction[EXPENSE_DETAILS.DATE]);
     if (
-      (dateRange.length > 0 && dateRange[0] && date.isBefore(dateRange[0])) ||
-      (dateRange.length > 1 && dateRange[1] && date.isAfter(dateRange[1]))
+      (dateRange && dateRange.length > 0 && dateRange[0] && date.isBefore(dateRange[0])) ||
+      (dateRange && dateRange.length > 1 && dateRange[1] && date.isAfter(dateRange[1]))
     ) {
       return prevSeries;
     }
@@ -44,8 +44,8 @@ const CategoricalAnalytics = () => {
     const prevSeries = { ...acc };
     const date = dayjs(transaction[EXPENSE_DETAILS.DATE]);
     if (
-      (dateRange.length > 0 && dateRange[0] && date.isBefore(dateRange[0])) ||
-      (dateRange.length > 1 && dateRange[1] && date.isAfter(dateRange[1]))
+      (dateRange && dateRange.length > 0 && dateRange[0] && date.isBefore(dateRange[0])) ||
+      (dateRange && dateRange.length > 1 && dateRange[1] && date.isAfter(dateRange[1]))
     ) {
       return prevSeries;
     }

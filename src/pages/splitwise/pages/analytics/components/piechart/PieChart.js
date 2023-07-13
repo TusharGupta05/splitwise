@@ -22,7 +22,7 @@ const PieChart = ({ titleText, name, data }) => {
       },
     ],
   };
-  return <Piechart highcharts={HighCharts} options={options} />;
+  return <Piechart containerProps={{ style: { height: '100%', width: '100%' } }} highcharts={HighCharts} options={options} />;
 };
 
 PieChart.propTypes = {

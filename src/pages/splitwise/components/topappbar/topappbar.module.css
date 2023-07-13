@@ -1,14 +1,15 @@
 .topAppBar {
   overflow: auto;
   position: fixed;
-  height: 10vh;
-  width: 100vw;
+  height: 10%;
+  width: 100%;
   background-color: white;
   color: black;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: fixed;
 }
 
 .container {
@@ -18,3 +19,15 @@
 .spacer {
   width: 20px;
 }
+
+.showMenu {
+  display: block;
+}
+
+
+@media (min-width:800px) {
+  .showMenu{
+    display: none;
+  }
+}
+

@@ -25,7 +25,7 @@ const handleLogin = produce((state, action) => {
     setItemInLocalStorage(LS_CACHE_KEYS.CURRENT_USER, newState.currentUser);
     return;
   }
-  throw new Error('invalid username or password');
+  throw new Error('Invalid username or password');
 });
 
 const handleRegister = produce((state, action) => {
