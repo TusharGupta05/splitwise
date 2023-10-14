@@ -33,6 +33,10 @@ const Register = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.headingTextContainer}>
+        <span className={styles.headingText}>Split</span>
+        <span className={styles.headingText2}>wise</span>
+      </div>
       <Card className={styles.registerForm}>
         <Form form={form} initialValues={{ remember: true }} onFinish={handleSubmit}>
           <Form.Item name={USER_PROFILE.NAME} rules={VALIDATION_RULES.NAME}>
@@ -54,7 +58,7 @@ const Register = () => {
             </Button>
           </Form.Item>
           <Form.Item>
-            Or
+            Already have an account?
             <NavLink to={ROUTES.LOGIN_ROUTE}> Login!</NavLink>
           </Form.Item>
         </Form>
