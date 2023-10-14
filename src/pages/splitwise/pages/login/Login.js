@@ -32,10 +32,6 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.headingTextContainer}>
-      <span className={styles.headingText}>Split</span>
-      <span className={styles.headingText2}>wise</span>
-      </div>
       <Card className={styles.loginForm}>
         <Form form={form} name="normal_login" initialValues={{ remember: true }} onFinish={handleSubmit}>
           <Form.Item name={USER_PROFILE.USERNAME} rules={VALIDATION_RULES.USERNAME}>
@@ -51,7 +47,7 @@ const Login = () => {
             </Button>
           </Form.Item>
           <Form.Item>
-            Don't have an account?
+            Or
             <NavLink to={ROUTES.REGISTER_ROUTE}> Register Now!</NavLink>
           </Form.Item>
         </Form>
